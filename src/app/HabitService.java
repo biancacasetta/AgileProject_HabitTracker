@@ -6,9 +6,11 @@ import java.util.Objects;
 public class HabitService {
     ArrayList<Habit> listOfHabits = new ArrayList<>();
 
-    public void createHabit(String n, String d) {
-        Habit habit = new Habit(n, d);
-        listOfHabits.add(habit);
+    public ArrayList<Habit> getListOfHabits() {
+        return this.listOfHabits;
+    }
+
+    public void addHabit(Habit habit) {listOfHabits.add(habit);
     }
 
     public void deleteHabit(String hn) {

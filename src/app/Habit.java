@@ -24,8 +24,5 @@ public class Habit {
         this.name = name;
         this.desc = desc;
     }
-
-
-
 }
 
