@@ -1,11 +1,10 @@
 package app;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class HabitService {
-    ArrayList<Habit> listOfHabits = new ArrayList<Habit>();
+    ArrayList<Habit> listOfHabits = new ArrayList<>();
 
     public void createHabit(String n, String d) {
         Habit habit = new Habit(n, d);
