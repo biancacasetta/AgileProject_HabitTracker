@@ -16,9 +16,9 @@ class HabitServiceTest {
 
       // Creating a HabitService class and adding 3 habits into it
       HabitService habitServiceClass = new HabitService();
-      Habit habit1 = new Habit("Drink water", "drink 1000ml of water");
-      Habit habit2 = new Habit("Do sports", "run a 10k");
-      Habit habit3 = new Habit("Meditate", "meditate for 10 minutes");
+      Habit habit1 = new Habit(1,"Drink water", "drink 1000ml of water");
+      Habit habit2 = new Habit(2,"Do sports", "run a 10k");
+      Habit habit3 = new Habit(3,"Meditate", "meditate for 10 minutes");
 
       habitServiceClass.addHabit(habit1);
       habitServiceClass.addHabit(habit2);
@@ -32,7 +32,7 @@ class HabitServiceTest {
 
       Habit res = habitServiceClass.getListOfHabits().getLast();
 
-      Habit exp = new Habit("Meditate", "meditate for 10 minutes");
+      Habit exp = new Habit(1,"Meditate", "meditate for 10 minutes");
 
       // expected is the last habit that was added
 
@@ -53,16 +53,16 @@ class HabitServiceTest {
 
     // Creating a HabitService class and adding 3 habits into it
     HabitService habitServiceClass = new HabitService();
-    Habit habit1 = new Habit("Drink water", "drink 1000ml of water");
-    Habit habit2 = new Habit("Do sports", "run a 10k");
-    Habit habit3 = new Habit("Meditate", "meditate for 10 minutes");
+    Habit habit1 = new Habit(1,"Drink water", "drink 1000ml of water");
+    Habit habit2 = new Habit(2,"Do sports", "run a 10k");
+    Habit habit3 = new Habit(3,"Meditate", "meditate for 10 minutes");
     habitServiceClass.addHabit(habit1);
     habitServiceClass.addHabit(habit2);
     habitServiceClass.addHabit(habit3);
 
     // using the getHabitFromList() method to retrive a Habit
     Habit res = habitServiceClass.getHabitFromList("Do sports");
-    Habit exp = new Habit("Do sports", "run a 10k");
+    Habit exp = new Habit(1,"Do sports", "run a 10k");
 
     Assertions.assertEquals(res, exp);
 

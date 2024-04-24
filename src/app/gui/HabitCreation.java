@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class HabitCreation extends JDialog implements ActionListener {
 
@@ -21,7 +22,11 @@ public class HabitCreation extends JDialog implements ActionListener {
     private JPanel buttons;
     private JButton addButton;
     private JButton cancelButton;
+    private Habit originalHabit;
+    private Habit habitToEdit;
+    private boolean isEditing;
 
+    //Creating habits
     public HabitCreation(Dashboard dashboard, HabitService habitService) {
         this.dashboard = dashboard;
         this.habitService = habitService;
@@ -44,7 +49,22 @@ public class HabitCreation extends JDialog implements ActionListener {
 
         this.styleUIComponents();
         this.displayGUI();
+        this.isEditing = false;
     }
+
+    //Editing habits
+    public HabitCreation(Dashboard dashboard, HabitService habitService, Habit habitToEdit) {
+        this(dashboard, habitService);
+        this.habitToEdit = habitToEdit;
+        this.originalHabit = new Habit(habitToEdit.getId(), habitToEdit.getName(), habitToEdit.getDesc());
+        this.isEditing = true;
+
+        nameField.setText(habitToEdit.getName());
+        descriptionField.setText(habitToEdit.getDesc());
+        addButton.setText("SAVE");
+    }
+
+    public Habit getEditedHabit() {return habitToEdit;}
 
     private void styleUIComponents() {
         //Habit Form
@@ -96,12 +116,21 @@ public class HabitCreation extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton) {
-            Habit newHabit = new Habit(nameField.getText(), descriptionField.getText());
-            this.habitService.addHabit(newHabit);
-            this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
-            this.dashboard.getProgressLabel()
-                    .setText(dashboard.calculateCompletionPercentage()
-                            + "% of today's habits achieved");
+            if (isEditing) {
+                habitToEdit.setName(nameField.getText());
+                habitToEdit.setDesc(descriptionField.getText());
+                if (!originalHabit.getName().equals(habitToEdit.getName()) || !originalHabit.getDesc().equals(habitToEdit.getDesc())) {
+                    this.habitService.editHabit(habitToEdit);
+                }
+            } else {
+                ArrayList<Habit> listOfHabits = this.habitService.getListOfHabits();
+                Habit newHabit = new Habit(listOfHabits.size() + 1, nameField.getText(), descriptionField.getText());
+                this.habitService.addHabit(newHabit);
+                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+                this.dashboard.getProgressLabel()
+                        .setText(dashboard.calculateCompletionPercentage()
+                                + "% of today's habits achieved");
+            }
             dashboard.displayGUI();
             this.dashboard.displayGUI();
             dispose();

@@ -1,11 +1,13 @@
 package app.gui;
 
 import app.Habit;
+import app.HabitService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class HabitCard implements ActionListener {
 
@@ -48,7 +50,9 @@ public class HabitCard implements ActionListener {
     }
 
     public static void main(String[] args) {
-        Habit h = new Habit("Wake up at 8am", "GET UP BITCH");
+        HabitService habitService = new HabitService();
+        ArrayList<Habit> habits = habitService.getListOfHabits();
+        Habit h = new Habit(habits.size() + 1,"Wake up at 8am", "GET UP BITCH");
         //HabitCard hc = new HabitCard(h);
 
         JFrame frame = new JFrame();

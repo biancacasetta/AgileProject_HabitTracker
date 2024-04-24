@@ -3,8 +3,10 @@ package app;
 import java.util.Objects;
 
 public class Habit {
+    private int id;
     private String name;
     private String desc;
+    public int getId() {return id; }
 
     public String getName() {
         return name;
@@ -30,7 +32,8 @@ public class Habit {
         return Objects.equals(name, habit.name) && Objects.equals(desc, habit.desc);
     }
 
-    public Habit(String name, String desc) {
+    public Habit(int id, String name, String desc) {
+        this.id = id;
         this.name = name;
         this.desc = desc;
     }
