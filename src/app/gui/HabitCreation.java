@@ -1,7 +1,7 @@
 package app.gui;
 
-import app.Habit;
-import app.HabitService;
+import app.model.Habit;
+import app.model.HabitService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,7 +102,6 @@ public class HabitCreation extends JDialog implements ActionListener {
             this.dashboard.getProgressLabel()
                     .setText(dashboard.calculateCompletionPercentage()
                             + "% of today's habits achieved");
-            dashboard.displayGUI();
             this.dashboard.displayGUI();
             dispose();
         } else if (e.getSource() == cancelButton) {

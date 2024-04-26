@@ -1,6 +1,6 @@
 package app.gui;
 
-import app.Habit;
+import app.model.Habit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,28 +47,15 @@ public class HabitCard implements ActionListener {
         checkbox.addActionListener(this);
     }
 
-    public static void main(String[] args) {
-        Habit h = new Habit("Wake up at 8am", "GET UP BITCH");
-        //HabitCard hc = new HabitCard(h);
-
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(450, 150);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.getContentPane().setLayout(new FlowLayout());
-        //frame.getContentPane().add(hc.innerPanel);
-        frame.setVisible(true);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.checkbox) {
+
             this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
             this.dashboard.getProgressLabel()
                     .setText(dashboard.calculateCompletionPercentage()
                             + "% of today's habits achieved");
-            dashboard.displayGUI();
+            this.dashboard.refreshProgress();
         }
 
     }
