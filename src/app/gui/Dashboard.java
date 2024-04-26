@@ -1,7 +1,7 @@
 package app.gui;
 
-import app.Habit;
-import app.HabitService;
+import app.model.Habit;
+import app.model.HabitService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class Dashboard extends JFrame implements ActionListener {
@@ -114,10 +113,6 @@ public class Dashboard extends JFrame implements ActionListener {
         this.dateHeader.add(nextDay, BorderLayout.EAST);
         getContentPane().add(this.dateHeader);
 
-        //Progress bar
-        getContentPane().add(progress);
-        getContentPane().add(progressLabel);
-
         //Habits Container
         habitsContainer.removeAll();
         addHabitList(habitService.getListOfHabits());
@@ -129,6 +124,16 @@ public class Dashboard extends JFrame implements ActionListener {
         this.tabFooter.add(profileButton);
         getContentPane().add(this.tabFooter);
 
+        //Progress bar
+        getContentPane().add(progress);
+        getContentPane().add(progressLabel);
+
+        this.setVisible(true);
+    }
+
+    public void refreshProgress() {
+        getContentPane().add(progress);
+        getContentPane().add(progressLabel);
         this.setVisible(true);
     }
 
