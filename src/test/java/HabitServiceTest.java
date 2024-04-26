@@ -1,7 +1,7 @@
 package test.java;
 
-import app.Habit;
-import app.HabitService;
+import app.model.HabitService;
+import app.model.Habit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
