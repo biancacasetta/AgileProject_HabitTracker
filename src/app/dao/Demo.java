@@ -10,6 +10,8 @@ import java.sql.*;
 
 
 public class Demo {
+    // this file is used to just see how you use the DBconnection class to connect to the database
+    // (it's from the lab4)
     public static void main(String[] args) throws IOException {
         try (Connection connection = DBConnection.getConnection();
              ResultSet resultSet = connection
