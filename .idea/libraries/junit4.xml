@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="junit4">
+    <CLASSES>
+      <root url="jar:///Applications/IntelliJ IDEA.app/Contents/lib/junit4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
