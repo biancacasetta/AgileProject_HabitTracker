@@ -11,7 +11,7 @@ public class HabitCard implements ActionListener {
 
     private Dashboard dashboard;
     JPanel innerPanel;
-    private JLabel name;
+    private JTextArea name;
     private JCheckBox checkbox;
     private JButton editButton;
     private JButton deleteButton;
@@ -19,7 +19,7 @@ public class HabitCard implements ActionListener {
     public HabitCard(Habit habit, Dashboard dashboard) {
         this.dashboard = dashboard;
         this.innerPanel = new JPanel(new BorderLayout());
-        this.name = new JLabel(habit.getName());
+        this.name = new JTextArea(habit.getName());
         this.checkbox = new JCheckBox();
 
         //adding buttons for edit and delete
@@ -43,9 +43,14 @@ public class HabitCard implements ActionListener {
         this.innerPanel.setMaximumSize(new Dimension(380,50));
 
         //Title
-        name.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        //name.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         name.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
         name.setForeground(Color.WHITE);
+        //properties of the JTextArea
+        this.name.setEditable(false); // Make JTextArea non-editable
+        this.name.setOpaque(false); // Make JTextArea transparent
+        this.name.setLineWrap(true); // Enable text wrapping
+        this.name.setWrapStyleWord(true); // Wrap at word boundaries
 
         //Checkbox
         checkbox.setBackground(Color.BLUE);
@@ -92,6 +97,7 @@ public class HabitCard implements ActionListener {
         //Add components to innerPanel
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.X_AXIS)); // Arrange components horizontally
         innerPanel.add(buttonsPanel, BorderLayout.EAST);
+
     }
 
     @Override
