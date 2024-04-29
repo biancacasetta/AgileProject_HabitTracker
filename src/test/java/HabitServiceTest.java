@@ -1,12 +1,11 @@
 package test.java;
 
-import app.Habit;
-import app.HabitService;
+import app.model.HabitService;
+import app.model.Habit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class HabitServiceTest {
 
@@ -15,14 +14,7 @@ class HabitServiceTest {
     public void testAddAndDeleteHabit() {
 
       // Creating a HabitService class and adding 3 habits into it
-      HabitService habitServiceClass = new HabitService();
-      Habit habit1 = new Habit(1,"Drink water", "drink 1000ml of water");
-      Habit habit2 = new Habit(2,"Do sports", "run a 10k");
-      Habit habit3 = new Habit(3,"Meditate", "meditate for 10 minutes");
-
-      habitServiceClass.addHabit(habit1);
-      habitServiceClass.addHabit(habit2);
-      habitServiceClass.addHabit(habit3);
+      HabitService habitServiceClass = habitServiceSetup();
 
       // deleting 2 of the 3 habits added
       habitServiceClass.deleteHabit("Drink water");
@@ -32,7 +24,7 @@ class HabitServiceTest {
 
       Habit res = habitServiceClass.getListOfHabits().getLast();
 
-      Habit exp = new Habit(1,"Meditate", "meditate for 10 minutes");
+      Habit exp = new Habit("Meditate", "meditate for 10 minutes");
 
       // expected is the last habit that was added
 
@@ -52,21 +44,27 @@ class HabitServiceTest {
   public void testHabitFromList () {
 
     // Creating a HabitService class and adding 3 habits into it
-    HabitService habitServiceClass = new HabitService();
-    Habit habit1 = new Habit(1,"Drink water", "drink 1000ml of water");
-    Habit habit2 = new Habit(2,"Do sports", "run a 10k");
-    Habit habit3 = new Habit(3,"Meditate", "meditate for 10 minutes");
-    habitServiceClass.addHabit(habit1);
-    habitServiceClass.addHabit(habit2);
-    habitServiceClass.addHabit(habit3);
+    HabitService habitServiceClass = habitServiceSetup();
 
     // using the getHabitFromList() method to retrive a Habit
     Habit res = habitServiceClass.getHabitFromList("Do sports");
-    Habit exp = new Habit(1,"Do sports", "run a 10k");
+    Habit exp = new Habit("Do sports", "run a 10k");
 
     Assertions.assertEquals(res, exp);
 
 
+  }
+
+  private HabitService habitServiceSetup() {
+    HabitService habitServiceClass = new HabitService();
+    Habit habit1 = new Habit("Drink water", "drink 1000ml of water");
+    Habit habit2 = new Habit("Do sports", "run a 10k");
+    Habit habit3 = new Habit("Meditate", "meditate for 10 minutes");
+    habitServiceClass.addHabit(habit1);
+    habitServiceClass.addHabit(habit2);
+    habitServiceClass.addHabit(habit3);
+
+    return habitServiceClass;
   }
 
 }
