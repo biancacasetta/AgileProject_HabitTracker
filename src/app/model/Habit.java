@@ -30,6 +30,14 @@ public class Habit {
         return Objects.equals(name, habit.name) && Objects.equals(desc, habit.desc);
     }
 
+    @Override
+    public String toString() {
+        return "Habit{" +
+                "name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                '}';
+    }
+
     public Habit(String name, String desc) {
         this.name = name;
         this.desc = desc;
