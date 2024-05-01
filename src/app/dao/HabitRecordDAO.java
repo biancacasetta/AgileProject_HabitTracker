@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,9 +50,10 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             if (rs.next()) {
                 int recordId = rs.getInt("recordId");
                 int habitId = rs.getInt("habitId");
-                Date copmletionDate = Date.valueOf(rs.getString("completionDate"));
+                Date completionDateSQL = rs.getDate("completionDate");
+                LocalDate completionDate = completionDateSQL.toLocalDate();
 
-                habitRecord = new HabitRecord(recordId, habitId, copmletionDate);
+                habitRecord = new HabitRecord(recordId, habitId, completionDate);
             }
 
         } catch (SQLException | IOException e) {
@@ -75,9 +77,10 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             while (rs.next()) {
                 int recordId = rs.getInt("recordId");
                 int habitId = rs.getInt("habitId");
-                Date copmletionDate = Date.valueOf(rs.getString("completionDate"));
+                Date completionDateSQL = rs.getDate("completionDate");
+                LocalDate completionDate = completionDateSQL.toLocalDate();
 
-                HabitRecord habitRecord = new HabitRecord(recordId, habitId, copmletionDate);
+                HabitRecord habitRecord = new HabitRecord(recordId, habitId, completionDate);
                 habitRecordsList.add(habitRecord);
 
             }

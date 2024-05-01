@@ -8,6 +8,7 @@ import java.sql.Connection;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class Demo {
                 HabitRecord habitRecord = new HabitRecord(
                         2,
                         5,
-                        Date.valueOf("2024-05-02"));
+                        LocalDate.of(2024, 5, 1));
 
 //                Habit habit = habitDAO.get(1);
 //                System.out.println(habit);

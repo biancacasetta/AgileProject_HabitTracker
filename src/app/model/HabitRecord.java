@@ -1,13 +1,14 @@
 package app.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class HabitRecord {
     private int recordId;
     private int habitId;
-    private Date completionDate;
+    private LocalDate completionDate;
 
-    public HabitRecord(int recordId, int habitId, Date completionDate) {
+    public HabitRecord(int recordId, int habitId, LocalDate completionDate) {
         this.recordId = recordId;
         this.habitId = habitId;
         this.completionDate = completionDate;
@@ -29,7 +30,7 @@ public class HabitRecord {
         this.habitId = habitId;
     }
 
-    public Date getCompletionDate() {
+    public LocalDate getCompletionDate() {
         return completionDate;
     }
 
@@ -42,7 +43,7 @@ public class HabitRecord {
                 '}';
     }
 
-    public void setCompletionDate(Date completionDate) {
+    public void setCompletionDate(LocalDate completionDate) {
         this.completionDate = completionDate;
     }
 }
