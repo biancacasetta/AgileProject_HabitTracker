@@ -1,7 +1,6 @@
 package app.dao;
 
 import app.model.Habit;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -97,8 +96,11 @@ class HabitDAOTest {
         int res = hDAO.delete(105);
         int exp = 1;
 
+        assertEquals(res, exp);
+
         //Delete habit using object
         int res2 = hDAO.delete(h2);
         int exp2 = 1;
+        assertEquals(res2, exp2);
     }
 }
