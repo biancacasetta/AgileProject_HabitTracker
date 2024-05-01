@@ -1,4 +1,4 @@
-package test.java;
+package model;
 
 import app.model.HabitService;
 import app.model.Habit;
