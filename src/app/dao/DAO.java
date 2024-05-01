@@ -10,7 +10,7 @@ public interface DAO<T> {
 
     List<T> getAll();
 
-    int update(T t, int id);
+    int update(T t);
 
-    int delete(T t, int id);
+    int delete(T t);
 }

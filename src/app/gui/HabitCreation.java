@@ -96,7 +96,8 @@ public class HabitCreation extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton) {
-            Habit newHabit = new Habit(nameField.getText(), descriptionField.getText());
+            int id = 0; //!! temporary fix, TO CHANGE !!
+            Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText());
             this.habitService.addHabit(newHabit);
             this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
             this.dashboard.getProgressLabel()

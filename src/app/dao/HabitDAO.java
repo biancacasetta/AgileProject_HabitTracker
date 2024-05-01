@@ -20,13 +20,12 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            // sql statement without id
-            // id is auto incremented in the database
-            String sql = "INSERT INTO activeHabits (name, desc) VALUES (?, ?);";
+            String sql = "INSERT INTO activeHabits (id, name, desc) VALUES (?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, habit.getName());
-            ps.setString(2, habit.getDesc());
+            ps.setInt(1, habit.getId());
+            ps.setString(2, habit.getName());
+            ps.setString(3, habit.getDesc());
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -49,12 +48,11 @@ public class HabitDAO implements DAO<Habit> {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // id not used yet in Habit class
                 int oid = rs.getInt("id");
                 String name = rs.getString("name");
                 String desc = rs.getString("desc");
 
-                habit = new Habit(name, desc);
+                habit = new Habit(oid, name, desc);
             }
 
         } catch (SQLException | IOException e) {
@@ -84,7 +82,7 @@ public class HabitDAO implements DAO<Habit> {
                 name = rs.getString("name");
                 desc = rs.getString("desc");
 
-                Habit habit = new Habit(name, desc);
+                Habit habit = new Habit(id, name, desc);
                 habitsList.add(habit);
 
             }
@@ -99,7 +97,7 @@ public class HabitDAO implements DAO<Habit> {
     }
 
     @Override
-    public int update(Habit habit, int id) {
+    public int update(Habit habit) {
         int result = 0;
 
         try (Connection con = DBConnection.getConnection()) {
@@ -109,7 +107,7 @@ public class HabitDAO implements DAO<Habit> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getName());
             ps.setString(2, habit.getDesc());
-            ps.setInt(3, id);
+            ps.setInt(3, habit.getId());
             result = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -120,7 +118,25 @@ public class HabitDAO implements DAO<Habit> {
     }
 
     @Override
-    public int delete(Habit habit, int id) {
+    public int delete(Habit habit) {
+        int result = 0;
+        try (Connection con = DBConnection.getConnection()){
+
+            String sql = "DELETE FROM activeHabits WHERE id=?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, habit.getId());
+            result = ps.executeUpdate();
+
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public int delete(int id) {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
