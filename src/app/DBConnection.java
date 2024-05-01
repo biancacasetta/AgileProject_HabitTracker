@@ -11,8 +11,6 @@ public class DBConnection {
         Properties props = new Properties();
         props.load(new FileInputStream("db.properties"));
         String url = props.getProperty("db.url");
-        String user = props.getProperty("db.user");
-        String password = props.getProperty("db.password");
-        return DriverManager.getConnection(url, user, password);
+        return DriverManager.getConnection(url);
     }
 }

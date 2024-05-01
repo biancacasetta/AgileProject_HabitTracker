@@ -1,11 +1,18 @@
 package app.model;
 
+import app.dao.HabitDAO;
 import app.model.Habit;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class HabitService {
+
+    private HabitDAO habitDAO;
+
+    public HabitService() {
+        this.habitDAO = new HabitDAO();
+    }
     ArrayList<Habit> listOfHabits = new ArrayList<>();
 
     public ArrayList<Habit> getListOfHabits() {
@@ -34,6 +41,15 @@ public class HabitService {
         habit.setName(placeholder);
         habit.setDesc(placeholder);
         return habit;
+    }
+
+    //Add habit to DB
+    public void addHabitToDB(Habit newHabit) {
+        habitDAO.insert(newHabit);
+    }
+
+    public Habit getHabitFromDB(String id) {
+        return habitDAO.get(id);
     }
 
 }

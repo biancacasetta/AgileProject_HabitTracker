@@ -1,4 +1,5 @@
 package app.gui;
+import java.util.UUID;
 
 import app.model.Habit;
 import app.model.HabitService;
@@ -96,8 +97,16 @@ public class HabitCreation extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton) {
-            Habit newHabit = new Habit(nameField.getText(), descriptionField.getText());
+            //generate a unique ID
+            String id = UUID.randomUUID().toString();
+            Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText());
             this.habitService.addHabit(newHabit);
+            //DB insertion
+            this.habitService.addHabitToDB(newHabit);
+            System.out.println("Habit added to DB");
+            //TEST: retrieve check
+            System.out.println(habitService.getHabitFromDB(newHabit.getId()));
+            //Progress bar
             this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
             this.dashboard.getProgressLabel()
                     .setText(dashboard.calculateCompletionPercentage()
