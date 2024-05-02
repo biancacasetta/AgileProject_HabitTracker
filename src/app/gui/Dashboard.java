@@ -107,30 +107,31 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     public void displayGUI() {
+        SwingUtilities.invokeLater(() -> {
+            //Header
+            this.dateHeader.add(previousDay, BorderLayout.WEST);
+            this.dateHeader.add(today, BorderLayout.CENTER);
+            this.dateHeader.add(nextDay, BorderLayout.EAST);
+            getContentPane().add(this.dateHeader);
 
-        //Header
-        this.dateHeader.add(previousDay, BorderLayout.WEST);
-        this.dateHeader.add(today, BorderLayout.CENTER);
-        this.dateHeader.add(nextDay, BorderLayout.EAST);
-        getContentPane().add(this.dateHeader);
+            //Habits Container
+            habitsContainer.removeAll();
+            //addHabitList(habitService.getListOfHabits());
+            addHabitList(habitService.getAllHabitsFromDB());//getting habits from DB
+            getContentPane().add(scrollPane);
 
-        //Habits Container
-        habitsContainer.removeAll();
-        //addHabitList(habitService.getListOfHabits());
-        addHabitList(habitService.getAllHabitsFromDB());//getting habits from DB
-        getContentPane().add(scrollPane);
+            //Footer
+            this.tabFooter.add(statsButton);
+            this.tabFooter.add(newHabitButton);
+            this.tabFooter.add(profileButton);
+            getContentPane().add(this.tabFooter);
 
-        //Footer
-        this.tabFooter.add(statsButton);
-        this.tabFooter.add(newHabitButton);
-        this.tabFooter.add(profileButton);
-        getContentPane().add(this.tabFooter);
+            //Progress bar
+            getContentPane().add(progress);
+            getContentPane().add(progressLabel);
 
-        //Progress bar
-        getContentPane().add(progress);
-        getContentPane().add(progressLabel);
-
-        this.setVisible(true);
+            this.setVisible(true);
+        });
     }
 
     public void refreshProgress() {
@@ -181,18 +182,19 @@ public class Dashboard extends JFrame implements ActionListener {
         }
     }
 
-    //Remove a HabitCard from GUI
-    public void removeHabitCard(HabitCard habitCard) {
-        habitsContainer.remove(habitCard.innerPanel);
-        getContentPane().revalidate();
-        getContentPane().repaint();
-    }
-
     //Refresh GUI
     public void refreshUI() {
-        getContentPane().removeAll();
-        createUIComponents();
-        displayGUI();
+        SwingUtilities.invokeLater(() -> {
+            //Remove all components from the content pane
+            getContentPane().removeAll();
+            //Recreate UI components
+            createUIComponents();
+            //Display the updated GUI
+            displayGUI();
+            // Revalidate and repaint the content pane
+            getContentPane().revalidate();
+            getContentPane().repaint();
+        });
     }
 
     @Override

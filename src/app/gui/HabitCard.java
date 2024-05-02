@@ -18,8 +18,11 @@ public class HabitCard implements ActionListener {
     private JButton deleteButton;
 
     private HabitService habitService;
+    private Habit habit;
 
     public HabitCard(Habit habit, Dashboard dashboard) {
+        this.habit = habit;
+        this.habitService = new HabitService();
         this.dashboard = dashboard;
         this.innerPanel = new JPanel(new BorderLayout());
         this.name = new JTextArea(habit.getName());
@@ -106,25 +109,30 @@ public class HabitCard implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.checkbox) {
-
-            this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
-            this.dashboard.getProgressLabel()
-                    .setText(dashboard.calculateCompletionPercentage()
-                            + "% of today's habits achieved");
-            this.dashboard.refreshProgress();
+            SwingUtilities.invokeLater(() -> {
+                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+                this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
+                this.dashboard.refreshProgress();
+            });
         } else if (e.getSource() == this.deleteButton) {
-            //Get which habit is selected
-
             //Delete habit from the DB
-            //habitService.deleteHabitFromDB();
-            //Remove all
-
-            // Refresh the UI in Dashboard
-            dashboard.displayGUI();
-            //Refresh progress
-
-
+            habitService.deleteHabitFromDB(this.habit.getId());
+            System.out.println("Habit removed from DB");
+            // Remove this HabitCard's innerPanel from the habitsContainer
+            SwingUtilities.invokeLater(() -> {
+                Container parent = this.innerPanel.getParent();
+                if (parent != null) {
+                    parent.remove(this.innerPanel);
+                    parent.revalidate();
+                    parent.repaint();
+                }
+                // Refresh the UI in Dashboard
+                dashboard.refreshUI();
+                // Update progress bar
+                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+                this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
+                this.dashboard.refreshProgress();
+            });
         }
-
     }
 }
