@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.List;
 
 public class Dashboard extends JFrame implements ActionListener {
 
@@ -115,7 +116,8 @@ public class Dashboard extends JFrame implements ActionListener {
 
         //Habits Container
         habitsContainer.removeAll();
-        addHabitList(habitService.getListOfHabits());
+        //addHabitList(habitService.getListOfHabits());
+        addHabitList(habitService.getAllHabitsFromDB());//getting the habits from DB
         getContentPane().add(scrollPane);
 
         //Footer
@@ -137,7 +139,7 @@ public class Dashboard extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    public void addHabitList(ArrayList<Habit> habits) {
+    public void addHabitList(List<Habit> habits) {
         for (Habit habit : habits) {
             HabitCard hc = new HabitCard(habit, this);
             habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -176,6 +178,20 @@ public class Dashboard extends JFrame implements ActionListener {
         } else {
             return 0;
         }
+    }
+
+    //Remove a HabitCard from GUI
+    public void removeHabitCard(HabitCard habitCard) {
+        habitsContainer.remove(habitCard.innerPanel);
+        getContentPane().revalidate();
+        getContentPane().repaint();
+    }
+
+    //Refresh GUI
+    public void refreshUI() {
+        getContentPane().removeAll();
+        createUIComponents();
+        displayGUI();
     }
 
     @Override

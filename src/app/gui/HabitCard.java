@@ -1,6 +1,7 @@
 package app.gui;
 
 import app.model.Habit;
+import app.model.HabitService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,8 @@ public class HabitCard implements ActionListener {
     private JCheckBox checkbox;
     private JButton editButton;
     private JButton deleteButton;
+
+    private HabitService habitService;
 
     public HabitCard(Habit habit, Dashboard dashboard) {
         this.dashboard = dashboard;
@@ -109,6 +112,18 @@ public class HabitCard implements ActionListener {
                     .setText(dashboard.calculateCompletionPercentage()
                             + "% of today's habits achieved");
             this.dashboard.refreshProgress();
+        } else if (e.getSource() == this.deleteButton) {
+            //Get which habit is selected
+
+            //Delete habit from the DB
+            //habitService.deleteHabitFromDB();
+            //Remove all
+
+            // Refresh the UI in Dashboard
+            dashboard.displayGUI();
+            //Refresh progress
+
+
         }
 
     }

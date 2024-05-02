@@ -6,6 +6,8 @@ import app.model.Habit;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import java.util.List;
+
 public class HabitService {
 
     private HabitDAO habitDAO;
@@ -48,8 +50,19 @@ public class HabitService {
         habitDAO.insert(newHabit);
     }
 
+    //Get habit from DB
     public Habit getHabitFromDB(String id) {
         return habitDAO.get(id);
+    }
+
+    //Get all habits from DB
+    public List<Habit> getAllHabitsFromDB() {
+        return habitDAO.getAll();
+    }
+
+    //Delete habit from DB
+    public void deleteHabitFromDB(String id) {
+        habitDAO.delete(id);
     }
 
 }
