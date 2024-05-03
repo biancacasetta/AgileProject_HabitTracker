@@ -26,7 +26,7 @@ public class Demo {
 
                 Habit habitToInsert = new Habit(2, "Do sports", "do 1000 squats");
                 HabitRecord habitRecord = new HabitRecord(
-                        2,
+                        3,
                         5,
                         Date.valueOf("2024-05-02"));
 
@@ -37,12 +37,13 @@ public class Demo {
 //                habitDAO.update(habitToInsert);
 //                habitDAO.delete(habitToInsert);
 
-                List<Habit> habitsList = habitDAO.getAll();
-                habitsList.forEach(x -> System.out.println(x));
+//                List<Habit> habitsList = habitDAO.getAll();
+//                habitsList.forEach(x -> System.out.println(x));
 
 //                habitRecordDAO.insert(habitRecord);
 //                habitRecordDAO.update(habitRecord);
                 habitRecordDAO.delete(habitRecord);
+                habitRecordDAO.delete(2);
 
                 List<HabitRecord> habitRecordsList = habitRecordDAO.getAll();
                 habitRecordsList.forEach(System.out::println);

@@ -22,8 +22,8 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             String sql = "INSERT INTO recordHabits (recordId, habitId, completionDate) VALUES (?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, habitRecord.getHabitId());
-            ps.setInt(2, habitRecord.getRecordId());
+            ps.setInt(1, habitRecord.getRecordId());
+            ps.setInt(2, habitRecord.getHabitId());
             ps.setString(3, habitRecord.getCompletionDate().toString());
             rs = ps.executeUpdate();
 
