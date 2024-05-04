@@ -40,11 +40,11 @@ class HabitRecordDAOTest {
     @Test
     void insert() {
         //Create habit
-        Habit habit = new Habit(101, "Drink water", "Drink more water");
+        Habit habit = new Habit("101", "Drink water", "Drink more water");
         testHabits.add(habit);
 
         //Create habit record
-        HabitRecord habitRecord = new HabitRecord(1, habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
+        HabitRecord habitRecord = new HabitRecord("1", habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
         testRecords.add(habitRecord);
 
         //Insert record into table
@@ -57,11 +57,11 @@ class HabitRecordDAOTest {
     @Test
     void get() {
         //Create habit
-        Habit habit = new Habit(102, "Drink water", "Drink more water");
+        Habit habit = new Habit("102", "Drink water", "Drink more water");
         testHabits.add(habit);
 
         //Create habit record and insert into table
-        HabitRecord exp = new HabitRecord(2, habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
+        HabitRecord exp = new HabitRecord("2", habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
         testRecords.add(exp);
         hrDAO.insert(exp);
 
@@ -74,16 +74,16 @@ class HabitRecordDAOTest {
     @Test
     void getAll() {
         //Create habits
-        Habit habit = new Habit(103, "Drink water", "Drink more water");
+        Habit habit = new Habit("103", "Drink water", "Drink more water");
         testHabits.add(habit);
-        Habit habit2 = new Habit(104, "Drink water", "Drink more water");
+        Habit habit2 = new Habit("104", "Drink water", "Drink more water");
         testHabits.add(habit2);
 
         //Create habit records and insert into table
-        HabitRecord habitRecord = new HabitRecord(3, habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
+        HabitRecord habitRecord = new HabitRecord("3", habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
         testRecords.add(habitRecord);
         hrDAO.insert(habitRecord);
-        HabitRecord habitRecord2 = new HabitRecord(4, habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
+        HabitRecord habitRecord2 = new HabitRecord("4", habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
         testRecords.add(habitRecord2);
         hrDAO.insert(habitRecord2);
 
@@ -99,16 +99,16 @@ class HabitRecordDAOTest {
     @Test
     void update() {
         //Create habit
-        Habit habit = new Habit(105, "Drink water", "Drink more water");
+        Habit habit = new Habit("105", "Drink water", "Drink more water");
         testHabits.add(habit);
 
         //Create habit records and insert into table
-        HabitRecord habitRecord = new HabitRecord(5, habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
+        HabitRecord habitRecord = new HabitRecord("5", habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
         testRecords.add(habitRecord);
         hrDAO.insert(habitRecord);
 
         //Update record in table
-        HabitRecord updatedRecord = new HabitRecord(5, habit.getId(), Date.valueOf(LocalDate.of(2025, 6, 4)));
+        HabitRecord updatedRecord = new HabitRecord("5", habit.getId(), Date.valueOf(LocalDate.of(2025, 6, 4)));
         int res = hrDAO.update(updatedRecord);
         int exp = 1;
 
@@ -118,11 +118,11 @@ class HabitRecordDAOTest {
     @Test
     void delete() {
         //Create habit
-        Habit habit = new Habit(106, "Drink water", "Drink more water");
+        Habit habit = new Habit("106", "Drink water", "Drink more water");
         testHabits.add(habit);
 
         //Create habit records and insert into table
-        HabitRecord habitRecord = new HabitRecord(6, habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
+        HabitRecord habitRecord = new HabitRecord("6", habit.getId(), Date.valueOf(LocalDate.of(2024, 5,3)));
         testRecords.add(habitRecord);
         hrDAO.insert(habitRecord);
 

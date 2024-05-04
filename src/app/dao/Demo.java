@@ -26,8 +26,8 @@ public class Demo {
 
                 Habit habitToInsert = new Habit("2", "Do sports", "do 1000 squats");
                 HabitRecord habitRecord = new HabitRecord(
-                        2,
-                        5,
+                        "2",
+                        "5",
                         Date.valueOf("2024-05-02"));
 
 //                Habit habit = habitDAO.get(1);

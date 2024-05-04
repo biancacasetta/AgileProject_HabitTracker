@@ -3,29 +3,29 @@ package app.model;
 import java.sql.Date;
 
 public class HabitRecord {
-    private int recordId;
-    private int habitId;
+    private String recordId; //change to string cause UUID
+    private String habitId; //change to string cause UUID
     private Date completionDate;
 
-    public HabitRecord(int recordId, int habitId, Date completionDate) {
+    public HabitRecord(String recordId, String habitId, Date completionDate) {
         this.recordId = recordId;
         this.habitId = habitId;
         this.completionDate = completionDate;
     }
 
-    public int getRecordId() {
+    public String getRecordId() {
         return recordId;
     }
 
-    public void setRecordId(int recordId) {
+    public void setRecordId(String recordId) {
         this.recordId = recordId;
     }
 
-    public int getHabitId() {
+    public String getHabitId() {
         return habitId;
     }
 
-    public void setHabitId(int habitId) {
+    public void setHabitId(String habitId) {
         this.habitId = habitId;
     }
 

@@ -22,8 +22,8 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             String sql = "INSERT INTO recordHabits (recordId, habitId, completionDate) VALUES (?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, habitRecord.getHabitId());
-            ps.setInt(2, habitRecord.getRecordId());
+            ps.setString(1, habitRecord.getRecordId());//change to string
+            ps.setString(2, habitRecord.getHabitId());//change to string
             ps.setString(3, habitRecord.getCompletionDate().toString());
             rs = ps.executeUpdate();
 
@@ -43,12 +43,12 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             String sql = "SELECT recordId, habitId, completionDate FROM recordHabits Where recordId = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, id); //changed to String
+            ps.setString(1, id); //changed to string
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                int recordId = rs.getInt("recordId");
-                int habitId = rs.getInt("habitId");
+                String recordId = rs.getString("recordId");//change to string
+                String habitId = rs.getString("habitId");//change to string
                 Date copmletionDate = Date.valueOf(rs.getString("completionDate"));
 
                 habitRecord = new HabitRecord(recordId, habitId, copmletionDate);
@@ -73,8 +73,8 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                int recordId = rs.getInt("recordId");
-                int habitId = rs.getInt("habitId");
+                String recordId = rs.getString("recordId");//changed to string
+                String habitId = rs.getString("habitId");//changed to string
                 Date copmletionDate = Date.valueOf(rs.getString("completionDate"));
 
                 HabitRecord habitRecord = new HabitRecord(recordId, habitId, copmletionDate);
@@ -98,9 +98,9 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             String sql = "UPDATE recordHabits SET habitId=?, completionDate=? WHERE recordId=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, habitRecord.getHabitId());
+            ps.setString(1, habitRecord.getHabitId());
             ps.setString(2, habitRecord.getCompletionDate().toString());
-            ps.setInt(3, habitRecord.getRecordId());
+            ps.setString(3, habitRecord.getRecordId());
             result = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -118,7 +118,7 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
             String sql = "DELETE FROM recordHabits WHERE recordId=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, habitRecord.getRecordId());
+            ps.setString(1, habitRecord.getRecordId());
             result = ps.executeUpdate();
 
 
@@ -129,14 +129,14 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
         return result;
     }
 
-    public int delete(int id) {
+    public int delete(String id) {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
             String sql = "DELETE FROM recordHabits WHERE recordId=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setString(1, id);//change to string
             result = ps.executeUpdate();
 
 
