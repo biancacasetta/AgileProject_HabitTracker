@@ -37,12 +37,14 @@ public class HabitService {
         return null;
     }
 
-    public Habit editHabit(String name) {
-        Habit habit = getHabitFromList(name);
-        String placeholder = "placeholder";
-        habit.setName(placeholder);
-        habit.setDesc(placeholder);
-        return habit;
+    public void editHabit(Habit habitToEdit) {
+        for (Habit habit : listOfHabits) {
+            if (habit.getId() == habitToEdit.getId()) {
+                habitToEdit.setName(habitToEdit.getName());
+                habitToEdit.setDesc(habitToEdit.getDesc());
+                break;
+            }
+        }
     }
 
     //Add habit to DB
