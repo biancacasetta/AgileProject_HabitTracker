@@ -1,12 +1,15 @@
 package app.gui;
 
 import app.model.Habit;
+import app.model.HabitRecord;
 import app.model.HabitService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.UUID;
 
 public class HabitCard implements ActionListener {
 
@@ -19,6 +22,7 @@ public class HabitCard implements ActionListener {
 
     private HabitService habitService;
     private Habit habit;
+    private HabitRecord habitRecord;
 
     public HabitCard(Habit habit, Dashboard dashboard) {
         this.habit = habit;
@@ -113,6 +117,18 @@ public class HabitCard implements ActionListener {
                 this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
                 this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
                 this.dashboard.refreshProgress();
+               //check if the checkbox is selected
+                if (this.checkbox.isSelected()) {
+                    //generate id for the new habit record
+                    //construct new habit record and insert to the database
+                    String recordId = UUID.randomUUID().toString();
+                    HabitRecord completedHabit = new HabitRecord(recordId, habit.getId(), LocalDate.now());
+                    this.habitService.addCompletedHabitToDB(completedHabit);
+                }
+                else {
+                    //check if the habit is in HabitRecord DB
+
+                }
             });
         } else if (e.getSource() == this.deleteButton) {
             //Delete habit from the DB

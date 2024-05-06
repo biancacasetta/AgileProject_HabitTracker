@@ -100,7 +100,7 @@ public class HabitCreation extends JDialog implements ActionListener {
             //generate a unique ID
             String id = UUID.randomUUID().toString();
             Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText());
-            this.habitService.addHabit(newHabit);
+            //this.habitService.addHabit(newHabit);
             //DB insertion
             this.habitService.addHabitToDB(newHabit);
             System.out.println("Habit added to DB");
