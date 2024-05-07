@@ -84,13 +84,13 @@ public class HabitCard implements ActionListener {
 
         //Edit and Delete Buttons
         editButton = new JButton(scaledEditIcon);
-        editButton.setBackground(Color.WHITE);
+        editButton.setBackground(Color.BLUE);
         editButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         editButton.setPreferredSize(new Dimension(iconSize, iconSize)); // Set icon size
         editButton.addActionListener(this);
 
         deleteButton = new JButton(scaledDeleteIcon);
-        deleteButton.setBackground(Color.WHITE);
+        deleteButton.setBackground(Color.BLUE);
         deleteButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         deleteButton.setPreferredSize(new Dimension(iconSize, iconSize)); // Set icon size
         deleteButton.addActionListener(this);
