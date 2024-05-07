@@ -24,7 +24,7 @@ public class Demo {
             if (con != null) {
                 System.out.println("Connection successful");
 
-                Habit habitToInsert = new Habit("2", "Do sports", "do 1000 squats");
+                Habit habitToInsert = new Habit("2", "Do sports", "do 1000 squats", true);
                 HabitRecord habitRecord = new HabitRecord(
                         "2",
                         "5",

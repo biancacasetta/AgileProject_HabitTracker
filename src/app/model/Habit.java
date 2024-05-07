@@ -7,6 +7,7 @@ public class Habit {
     private String id;
     private String name;
     private String desc;
+    private boolean isActive;
 
     public String getName() {
         return name;
@@ -20,6 +21,10 @@ public class Habit {
         return id;
     }
 
+    public Boolean getIsActive(){
+        return isActive;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -30,6 +35,9 @@ public class Habit {
 
     public void setId(String id) {
         this.id = id;
+    }
+    public void setIsActive(Boolean bool) {
+        this.isActive = bool;
     }
 
     @Override
@@ -50,10 +58,11 @@ public class Habit {
                 '}';
     }
 
-    public Habit(String id, String name, String desc) {
+    public Habit(String id, String name, String desc, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.desc = desc;
+        this.isActive = isActive;
     }
 }
 

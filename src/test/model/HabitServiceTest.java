@@ -1,4 +1,4 @@
-package test.java;
+package model;
 
 import app.model.HabitService;
 import app.model.Habit;
@@ -24,7 +24,7 @@ class HabitServiceTest {
 
       Habit res = habitServiceClass.getListOfHabits().getLast();
 
-      Habit exp = new Habit("3", "Meditate", "meditate for 10 minutes");
+      Habit exp = new Habit("3", "Meditate", "meditate for 10 minutes", true);
 
       // expected is the last habit that was added
 
@@ -46,9 +46,9 @@ class HabitServiceTest {
     // Creating a HabitService class and adding 3 habits into it
     HabitService habitServiceClass = habitServiceSetup();
 
-    // using the getHabitFromList() method to retrive a Habit
+    // using the getHabitFromList() method to retrieve a Habit
     Habit res = habitServiceClass.getHabitFromList("Do sports");
-    Habit exp = new Habit("2", "Do sports", "run a 10k");
+    Habit exp = new Habit("2", "Do sports", "run a 10k", true);
 
     Assertions.assertEquals(res, exp);
 
@@ -57,9 +57,9 @@ class HabitServiceTest {
 
   private HabitService habitServiceSetup() {
     HabitService habitServiceClass = new HabitService();
-    Habit habit1 = new Habit("1", "Drink water", "drink 1000ml of water");
-    Habit habit2 = new Habit("2", "Do sports", "run a 10k");
-    Habit habit3 = new Habit("3", "Meditate", "meditate for 10 minutes");
+    Habit habit1 = new Habit("1", "Drink water", "drink 1000ml of water", true);
+    Habit habit2 = new Habit("2", "Do sports", "run a 10k", true);
+    Habit habit3 = new Habit("3", "Meditate", "meditate for 10 minutes", true);
     habitServiceClass.addHabit(habit1);
     habitServiceClass.addHabit(habit2);
     habitServiceClass.addHabit(habit3);
