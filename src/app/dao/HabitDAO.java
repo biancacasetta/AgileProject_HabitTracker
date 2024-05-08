@@ -149,10 +149,11 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "DELETE FROM habits WHERE id=?";
+            String sql = "UPDATE habits SET isActive=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, id); //changed to string
+            ps.setBoolean(1, false);
+            ps.setString(2, id); //changed to string
             result = ps.executeUpdate();
 
 
@@ -162,4 +163,24 @@ public class HabitDAO implements DAO<Habit> {
 
         return result;
     }
+
+    public int clearFromTable(Habit habit) {
+        int result = 0;
+        try (Connection con = DBConnection.getConnection()){
+
+            String sql = "DELETE FROM habits WHERE id=?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, habit.getId()); //changed to string
+            result = ps.executeUpdate();
+
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }
+

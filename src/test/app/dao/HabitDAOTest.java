@@ -21,7 +21,7 @@ class HabitDAOTest {
     @AfterEach
     void deleteTestHabits() {
         for (Habit habit : testHabits) {
-            hDAO.delete(habit);
+            hDAO.clearFromTable(habit);
         }
         testHabits.clear();
     }
