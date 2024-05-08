@@ -93,6 +93,8 @@ class HabitDAOTest {
         //Create habit and insert
         Habit h1 = new Habit("105", "Delete me", "Put me out of my misery", true);
         Habit h2 = new Habit("106", "Go for a walk", "Sunshine and fresh air is great!", true);
+        testHabits.add(h1);
+        testHabits.add(h2);
         hDAO.insert(h1);
         hDAO.insert(h2);
 

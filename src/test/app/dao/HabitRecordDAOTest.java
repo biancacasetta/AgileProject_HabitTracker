@@ -32,7 +32,7 @@ class HabitRecordDAOTest {
 
 
         for (Habit habit : testHabits) {
-            hDAO.delete(habit);
+            hDAO.clearFromTable(habit);
         }
         testHabits.clear();
     }
