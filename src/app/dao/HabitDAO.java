@@ -88,9 +88,10 @@ public class HabitDAO implements DAO<Habit> {
                 desc = rs.getString("desc");
                 isActive = rs.getBoolean("isActive");
 
-                Habit habit = new Habit(id, name, desc, isActive);
-                habitsList.add(habit);
-
+                if(isActive) {
+                    Habit habit = new Habit(id, name, desc, isActive);
+                    habitsList.add(habit);
+                }
             }
 
 
@@ -129,10 +130,11 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "DELETE FROM habits WHERE id=?";
+            String sql = "UPDATE habits SET isActive=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, habit.getId()); //changed to string
+            ps.setBoolean(1, false);
+            ps.setString(2, habit.getId()); //changed to string
             result = ps.executeUpdate();
 
 
