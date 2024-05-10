@@ -133,6 +133,14 @@ public class HabitCard implements ActionListener {
                     this.dashboard.refreshProgress();
                 });
             }
+        } else if (e.getSource() == editButton) {
+            // Pass the existing habit to the HabitCreation dialog for editing
+            HabitCreation hc = new HabitCreation(this.dashboard, this.habitService, this.habit);
+            //Refresh dashboard and progress bar
+            dashboard.refreshUI();
+            this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+            this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
+            this.dashboard.refreshProgress();
         }
     }
 }
