@@ -20,7 +20,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "INSERT INTO habits (id, name, desc, isActive) VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO activeHabits (id, name, desc, isActive) VALUES (?, ?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getId());//changed to string
@@ -42,7 +42,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "SELECT id, name, desc, isActive FROM habits Where id = ?";
+            String sql = "SELECT id, name, desc, isActive FROM activeHabits Where id = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, id); //changed to string
@@ -72,7 +72,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "SELECT id, name, desc, isActive FROM habits";
+            String sql = "SELECT id, name, desc, isActive FROM activeHabits";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -109,7 +109,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "UPDATE habits SET name=?, `desc`=?, isActive=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET name=?, `desc`=?, isActive=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getName());
@@ -130,7 +130,7 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "UPDATE habits SET isActive=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET isActive=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setBoolean(1, false);
@@ -149,7 +149,7 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "UPDATE habits SET isActive=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET isActive=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setBoolean(1, false);
@@ -168,7 +168,7 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "DELETE FROM habits WHERE id=?";
+            String sql = "DELETE FROM activeHabits WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getId()); //changed to string
