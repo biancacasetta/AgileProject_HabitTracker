@@ -1,12 +1,16 @@
 package app.gui;
 
 import app.model.Habit;
+import app.model.HabitRecord;
 import app.model.HabitService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 public class HabitCard implements ActionListener {
 
@@ -19,10 +23,12 @@ public class HabitCard implements ActionListener {
 
     private HabitService habitService;
     private Habit habit;
+    private HabitRecord habitRecord;
 
-    public HabitCard(Habit habit, Dashboard dashboard) {
+    public HabitCard(Habit habit, HabitRecord habitRecord, Dashboard dashboard) {
         this.habit = habit;
         this.habitService = new HabitService();
+        this.habitRecord = habitRecord; // Assign habit record
         this.dashboard = dashboard;
         this.innerPanel = new JPanel(new BorderLayout());
         this.name = new JTextArea(habit.getName());
@@ -35,6 +41,7 @@ public class HabitCard implements ActionListener {
         this.innerPanel.add(name, BorderLayout.WEST);
         this.innerPanel.add(checkbox, BorderLayout.EAST);
 
+        adjustCompletion(this.habitRecord);
         this.styleUIComponents();
     }
 
@@ -42,11 +49,24 @@ public class HabitCard implements ActionListener {
         return this.checkbox.isSelected();
     }
 
+    public void adjustCompletion(HabitRecord habitRecord) {
+        if (habitRecord != null) {
+            HabitRecord currentHabitRecord = habitService.getHabitRecordFromDB(habitRecord.getRecordId());
+            if (currentHabitRecord != null) {
+                this.checkbox.setSelected(true);
+            } else {
+                this.checkbox.setSelected(false);
+            }
+        } else {
+            this.checkbox.setSelected(false);
+        }
+    }
+
     private void styleUIComponents() {
         //Container
         innerPanel.setBackground(Color.BLUE);
-        innerPanel.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
-        this.innerPanel.setMaximumSize(new Dimension(380,50));
+        innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        this.innerPanel.setMaximumSize(new Dimension(380, 50));
 
         //Title
         //name.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -60,7 +80,7 @@ public class HabitCard implements ActionListener {
 
         //Checkbox
         checkbox.setBackground(Color.BLUE);
-        checkbox.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        checkbox.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         checkbox.addActionListener(this);
 
         //Calculate icon size based on the height of the inner panel
@@ -109,11 +129,23 @@ public class HabitCard implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.checkbox) {
-            SwingUtilities.invokeLater(() -> {
-                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
-                this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
-                this.dashboard.refreshProgress();
-            });
+            if (getCompletion()) {
+                // Checkbox is checked, create a new HabitRecord and save it
+                String recordId = UUID.randomUUID().toString();
+                HabitRecord newHabitRecord = new HabitRecord(recordId, habit.getId(), LocalDate.now());
+                this.habitService.addHabitRecordToDB(newHabitRecord);
+                adjustCompletion(newHabitRecord);
+                System.out.println("Habit record added to the database.");
+            } else {
+                // Checkbox is unchecked, delete the corresponding HabitRecord
+                this.habitService.deleteHabitRecordFromDB(this.habitRecord);
+                // Update the habitRecord variable to reflect the change
+                adjustCompletion(this.habitRecord);
+                System.out.println("Habit record deleted from the database.");
+            }
+            // Refresh UI and update progress
+            dashboard.refreshUI();
+            dashboard.updateProgressBar();
         } else if (e.getSource() == this.deleteButton) {
             DeletionPopUp deletionPopUp = new DeletionPopUp(this.dashboard, this.habitService, this.habit);
             if (deletionPopUp.deleted) {
@@ -143,4 +175,6 @@ public class HabitCard implements ActionListener {
             this.dashboard.refreshProgress();
         }
     }
+
+
 }

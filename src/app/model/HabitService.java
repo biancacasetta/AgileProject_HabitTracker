@@ -1,6 +1,7 @@
 package app.model;
 
 import app.dao.HabitDAO;
+import app.dao.HabitRecordDAO;
 import app.model.Habit;
 
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ import java.util.List;
 public class HabitService {
 
     private HabitDAO habitDAO;
+    private HabitRecordDAO habitRecordDAO;
 
     public HabitService() {
         this.habitDAO = new HabitDAO();
+        this.habitRecordDAO = new HabitRecordDAO();
     }
     ArrayList<Habit> listOfHabits = new ArrayList<>();
 
@@ -68,4 +71,21 @@ public class HabitService {
         habitDAO.delete(id);
     }
 
+    //Insert completed habit to DB
+    public void addHabitRecordToDB(HabitRecord completedHabit) {
+        habitRecordDAO.insert(completedHabit);
+    }
+
+    public void deleteHabitRecordFromDB(HabitRecord uncompletedHabit) {
+        habitRecordDAO.delete(uncompletedHabit);
+    }
+
+    //Retrieve habit record from DB
+    public HabitRecord getHabitRecordFromDB(String recordId) {
+        return habitRecordDAO.get(recordId);
+    }
+
+    public List<HabitRecord> getAllHabitRecordsFromDB() {
+        return habitRecordDAO.getAll();
+    }
 }

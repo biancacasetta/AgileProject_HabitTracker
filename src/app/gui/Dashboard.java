@@ -2,6 +2,7 @@ package app.gui;
 
 import app.model.Habit;
 import app.model.HabitService;
+import app.model.HabitRecord;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +15,7 @@ import java.util.Locale;
 import java.util.List;
 
 public class Dashboard extends JFrame implements ActionListener {
-
-    private HabitService habitService;
+    //UI components
     private JPanel dateHeader;
     private LocalDateTime currentDate;
     private JLabel today;
@@ -29,10 +29,21 @@ public class Dashboard extends JFrame implements ActionListener {
     private JButton statsButton;
     private JButton newHabitButton;
     private JButton profileButton;
+
+    //instantiate other necessary classes
+    private HabitService habitService;
+
+    private HabitCard currentHabitCard;
+
+    private HabitRecord habitRecord;
+
+    //getter and setter for
+
+    //constructor
     public Dashboard() {
+        //initialise class instances
         this.habitService = new HabitService();
         this.currentDate = LocalDateTime.now();
-
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
         this.setResizable(false);
@@ -116,9 +127,10 @@ public class Dashboard extends JFrame implements ActionListener {
 
             //Habits Container
             habitsContainer.removeAll();
-            //addHabitList(habitService.getListOfHabits());
             addHabitList(habitService.getAllHabitsFromDB());//getting habits from DB
             getContentPane().add(scrollPane);
+
+            this.setVisible(true);
 
             //Footer
             this.tabFooter.add(statsButton);
@@ -134,20 +146,39 @@ public class Dashboard extends JFrame implements ActionListener {
         });
     }
 
+
+
     public void refreshProgress() {
         getContentPane().add(progress);
         getContentPane().add(progressLabel);
         this.setVisible(true);
     }
 
+    //Method that adds list of habits from the DB and associated completion status to the dashboard
     public void addHabitList(List<Habit> habits) {
+        List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
-            HabitCard hc = new HabitCard(habit, this);
+            // Find the associated habit record
+            HabitRecord habitRecord = findHabitRecordForHabit(habit, habitRecords);
+            // Create a new HabitCard with the habit and its associated habit record
+            HabitCard hc = new HabitCard(habit, habitRecord, this);
+            // Update checkbox status based on completion status from database
+            hc.adjustCompletion(habitRecord);
             habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
             this.habitsContainer.add(hc.innerPanel);
             habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         }
     }
+
+    private HabitRecord findHabitRecordForHabit(Habit habit, List<HabitRecord> habitRecords) {
+        for (HabitRecord record : habitRecords) {
+            if (record.getHabitId().equals(habit.getId())) {
+                return record; // Return the habit record if found
+            }
+        }
+        return null; // Return null if no associated habit record is found
+    }
+
 
     private String formatDate(LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.ENGLISH);
@@ -155,7 +186,6 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     public int calculateCompletionPercentage() {
-        //int totalHabits = this.habitService.getListOfHabits().size();
         int totalHabits = this.habitService.getAllHabitsFromDB().size(); //getting habits from DB
 
         ArrayList<JCheckBox> checkBoxList = new ArrayList<>();
@@ -197,6 +227,13 @@ public class Dashboard extends JFrame implements ActionListener {
         });
     }
 
+    public void updateProgressBar() {
+        // Update progress bar
+        this.getProgress().setValue(calculateCompletionPercentage());
+        this.getProgressLabel().setText(calculateCompletionPercentage() + "% of today's habits achieved");
+        this.refreshProgress();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.previousDay) {
@@ -211,4 +248,6 @@ public class Dashboard extends JFrame implements ActionListener {
             HabitCreation hc = new HabitCreation(this, this.habitService);
         }
     }
+
+
 }
