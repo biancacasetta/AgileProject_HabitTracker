@@ -128,6 +128,7 @@ public class Dashboard extends JFrame implements ActionListener {
             //Habits Container
             habitsContainer.removeAll();
             addHabitList(habitService.getAllHabitsFromDB());//getting habits from DB
+            updateProgressBar();
             getContentPane().add(scrollPane);
 
             this.setVisible(true);
@@ -187,7 +188,6 @@ public class Dashboard extends JFrame implements ActionListener {
 
     public int calculateCompletionPercentage() {
         int totalHabits = this.habitService.getAllHabitsFromDB().size(); //getting habits from DB
-
         ArrayList<JCheckBox> checkBoxList = new ArrayList<>();
         if(this.habitsContainer != null) {
             for (Component component : this.habitsContainer.getComponents()) {
