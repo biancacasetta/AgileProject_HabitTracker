@@ -147,21 +147,32 @@ public class HabitCard implements ActionListener {
             dashboard.refreshUI();
             dashboard.updateProgressBar();
         } else if (e.getSource() == this.deleteButton) {
-            // Delete habit from the DB
-            habitService.deleteHabitFromDB(this.habit.getId());
-            System.out.println("Habit removed from DB");
-            // Remove this HabitCard's innerPanel from the habitsContainer
-            SwingUtilities.invokeLater(() -> {
-                Container parent = this.innerPanel.getParent();
-                if (parent != null) {
-                    parent.remove(this.innerPanel);
-                    parent.revalidate();
-                    parent.repaint();
-                }
-                // Refresh the UI in Dashboard
-                dashboard.refreshUI();
-                dashboard.updateProgressBar();
-            });
+            DeletionPopUp deletionPopUp = new DeletionPopUp(this.dashboard, this.habitService, this.habit);
+            if (deletionPopUp.deleted) {
+                // Remove this HabitCard's innerPanel from the habitsContainer
+                SwingUtilities.invokeLater(() -> {
+                    Container parent = this.innerPanel.getParent();
+                    if (parent != null) {
+                        parent.remove(this.innerPanel);
+                        parent.revalidate();
+                        parent.repaint();
+                    }
+                    // Refresh the UI in Dashboard
+                    dashboard.refreshUI();
+                    // Update progress bar
+                    this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+                    this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
+                    this.dashboard.refreshProgress();
+                });
+            }
+        } else if (e.getSource() == editButton) {
+            // Pass the existing habit to the HabitCreation dialog for editing
+            HabitCreation hc = new HabitCreation(this.dashboard, this.habitService, this.habit);
+            //Refresh dashboard and progress bar
+            dashboard.refreshUI();
+            this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+            this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
+            this.dashboard.refreshProgress();
         }
     }
 

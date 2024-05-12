@@ -54,6 +54,7 @@ public class HabitService {
     public void addHabitToDB(Habit newHabit) {
         habitDAO.insert(newHabit);
     }
+    public void editHabitInDB(Habit editHabit) {habitDAO.update(editHabit);}
 
     //Get habit from DB
     public Habit getHabitFromDB(String id) {

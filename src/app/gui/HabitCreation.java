@@ -14,6 +14,7 @@ public class HabitCreation extends JDialog implements ActionListener {
 
     private Dashboard dashboard;
     private HabitService habitService;
+    private Habit habit;
     private JPanel habitForm;
     private JLabel nameLabel;
     private JTextField nameField;
@@ -22,10 +23,16 @@ public class HabitCreation extends JDialog implements ActionListener {
     private JPanel buttons;
     private JButton addButton;
     private JButton cancelButton;
+    private boolean isEditing;
 
     public HabitCreation(Dashboard dashboard, HabitService habitService) {
+        this(dashboard, habitService, null); //Call regular method without habit
+    }
+
+    public HabitCreation(Dashboard dashboard, HabitService habitService, Habit habit) {
         this.dashboard = dashboard;
         this.habitService = habitService;
+        this.habit = habit;
         habitForm = new JPanel();
         nameLabel = new JLabel("Habit:");
         nameField = new JTextField();
@@ -44,7 +51,19 @@ public class HabitCreation extends JDialog implements ActionListener {
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         this.styleUIComponents();
-        this.displayGUI();
+
+
+        // If habit is not null, populate fields with habit data
+        if (habit != null) {
+            nameField.setText(habit.getName());
+            descriptionField.setText(habit.getDesc());
+            addButton.setText("EDIT");
+            isEditing = true;
+            this.displayGUI();
+        } else {
+            isEditing = false;
+            this.displayGUI();
+        }
     }
 
     private void styleUIComponents() {
@@ -92,27 +111,40 @@ public class HabitCreation extends JDialog implements ActionListener {
         this.setVisible(true);
     }
 
+    public void setEditMode() {
+        addButton.setText("EDIT");
+        isEditing = true;
+    }
+
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton) {
-            //generate a unique ID
-            String id = UUID.randomUUID().toString();
-            Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText());
-            //this.habitService.addHabit(newHabit);
-            //DB insertion
-            this.habitService.addHabitToDB(newHabit);
-            System.out.println("Habit added to DB");
-            //TEST: retrieve check
-            System.out.println(habitService.getHabitFromDB(newHabit.getId()));
-            //Progress bar
-            this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
-            this.dashboard.getProgressLabel()
-                    .setText(dashboard.calculateCompletionPercentage()
-                            + "% of today's habits achieved");
-            this.dashboard.displayGUI();
-            dispose();
+            if (isEditing) {
+                Habit editHabit = new Habit(habit.getId(), nameField.getText(), descriptionField.getText(), true);
+                this.habitService.editHabit(editHabit);
+                this.habitService.editHabitInDB(editHabit);
+                System.out.println("Habit edited");
+                dispose();
+            } else {
+                //generate a unique ID
+                String id = UUID.randomUUID().toString();
+                Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText(), true);
+                this.habitService.addHabit(newHabit);
+                //DB insertion
+                this.habitService.addHabitToDB(newHabit);
+                System.out.println("Habit added to DB");
+                //TEST: retrieve check
+                System.out.println(habitService.getHabitFromDB(newHabit.getId()));
+                //Progress bar
+                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
+                this.dashboard.getProgressLabel()
+                        .setText(dashboard.calculateCompletionPercentage()
+                                + "% of today's habits achieved");
+                this.dashboard.displayGUI();
+                dispose();
+            }
         } else if (e.getSource() == cancelButton) {
             dispose();
         }
