@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public class HabitCard implements ActionListener {
@@ -24,9 +25,10 @@ public class HabitCard implements ActionListener {
     private Habit habit;
     private HabitRecord habitRecord;
 
-    public HabitCard(Habit habit, Dashboard dashboard) {
+    public HabitCard(Habit habit, HabitRecord habitRecord, Dashboard dashboard) {
         this.habit = habit;
         this.habitService = new HabitService();
+        this.habitRecord = habitRecord; // Assign habit record
         this.dashboard = dashboard;
         this.innerPanel = new JPanel(new BorderLayout());
         this.name = new JTextArea(habit.getName());
@@ -39,6 +41,7 @@ public class HabitCard implements ActionListener {
         this.innerPanel.add(name, BorderLayout.WEST);
         this.innerPanel.add(checkbox, BorderLayout.EAST);
 
+        adjustCompletion(this.habitRecord);
         this.styleUIComponents();
     }
 
@@ -46,11 +49,24 @@ public class HabitCard implements ActionListener {
         return this.checkbox.isSelected();
     }
 
+    public void adjustCompletion(HabitRecord habitRecord) {
+        if (habitRecord != null) {
+            HabitRecord currentHabitRecord = habitService.getHabitRecordFromDB(habitRecord.getRecordId());
+            if (currentHabitRecord != null) {
+                this.checkbox.setSelected(true);
+            } else {
+                this.checkbox.setSelected(false);
+            }
+        } else {
+            this.checkbox.setSelected(false);
+        }
+    }
+
     private void styleUIComponents() {
         //Container
         innerPanel.setBackground(Color.BLUE);
-        innerPanel.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
-        this.innerPanel.setMaximumSize(new Dimension(380,50));
+        innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        this.innerPanel.setMaximumSize(new Dimension(380, 50));
 
         //Title
         //name.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -64,7 +80,7 @@ public class HabitCard implements ActionListener {
 
         //Checkbox
         checkbox.setBackground(Color.BLUE);
-        checkbox.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        checkbox.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         checkbox.addActionListener(this);
 
         //Calculate icon size based on the height of the inner panel
@@ -88,13 +104,13 @@ public class HabitCard implements ActionListener {
 
         //Edit and Delete Buttons
         editButton = new JButton(scaledEditIcon);
-        editButton.setBackground(Color.WHITE);
+        editButton.setBackground(Color.BLUE);
         editButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         editButton.setPreferredSize(new Dimension(iconSize, iconSize)); // Set icon size
         editButton.addActionListener(this);
 
         deleteButton = new JButton(scaledDeleteIcon);
-        deleteButton.setBackground(Color.WHITE);
+        deleteButton.setBackground(Color.BLUE);
         deleteButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         deleteButton.setPreferredSize(new Dimension(iconSize, iconSize)); // Set icon size
         deleteButton.addActionListener(this);
@@ -113,25 +129,25 @@ public class HabitCard implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.checkbox) {
-            SwingUtilities.invokeLater(() -> {
-                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
-                this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
-                this.dashboard.refreshProgress();
-               //check if the checkbox is selected
-                if (this.checkbox.isSelected()) {
-                    //generate id for the new habit record
-                    //construct new habit record and insert to the database
-                    String recordId = UUID.randomUUID().toString();
-                    HabitRecord completedHabit = new HabitRecord(recordId, habit.getId(), LocalDate.now());
-                    this.habitService.addCompletedHabitToDB(completedHabit);
-                }
-                else {
-                    //check if the habit is in HabitRecord DB
-
-                }
-            });
+            if (getCompletion()) {
+                // Checkbox is checked, create a new HabitRecord and save it
+                String recordId = UUID.randomUUID().toString();
+                HabitRecord newHabitRecord = new HabitRecord(recordId, habit.getId(), LocalDate.now());
+                this.habitService.addHabitRecordToDB(newHabitRecord);
+                adjustCompletion(newHabitRecord);
+                System.out.println("Habit record added to the database.");
+            } else {
+                // Checkbox is unchecked, delete the corresponding HabitRecord
+                this.habitService.deleteHabitRecordFromDB(this.habitRecord);
+                // Update the habitRecord variable to reflect the change
+                adjustCompletion(this.habitRecord);
+                System.out.println("Habit record deleted from the database.");
+            }
+            // Refresh UI and update progress
+            dashboard.refreshUI();
+            dashboard.updateProgressBar();
         } else if (e.getSource() == this.deleteButton) {
-            //Delete habit from the DB
+            // Delete habit from the DB
             habitService.deleteHabitFromDB(this.habit.getId());
             System.out.println("Habit removed from DB");
             // Remove this HabitCard's innerPanel from the habitsContainer
@@ -144,11 +160,10 @@ public class HabitCard implements ActionListener {
                 }
                 // Refresh the UI in Dashboard
                 dashboard.refreshUI();
-                // Update progress bar
-                this.dashboard.getProgress().setValue(dashboard.calculateCompletionPercentage());
-                this.dashboard.getProgressLabel().setText(dashboard.calculateCompletionPercentage() + "% of today's habits achieved");
-                this.dashboard.refreshProgress();
+                dashboard.updateProgressBar();
             });
         }
     }
+
+
 }

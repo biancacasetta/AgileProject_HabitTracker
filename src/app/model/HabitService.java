@@ -71,8 +71,20 @@ public class HabitService {
     }
 
     //Insert completed habit to DB
-    public void addCompletedHabitToDB(HabitRecord completedHabit) {
+    public void addHabitRecordToDB(HabitRecord completedHabit) {
         habitRecordDAO.insert(completedHabit);
     }
 
+    public void deleteHabitRecordFromDB(HabitRecord uncompletedHabit) {
+        habitRecordDAO.delete(uncompletedHabit);
+    }
+
+    //Retrieve habit record from DB
+    public HabitRecord getHabitRecordFromDB(String recordId) {
+        return habitRecordDAO.get(recordId);
+    }
+
+    public List<HabitRecord> getAllHabitRecordsFromDB() {
+        return habitRecordDAO.getAll();
+    }
 }
