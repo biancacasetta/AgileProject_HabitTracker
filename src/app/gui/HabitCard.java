@@ -132,7 +132,7 @@ public class HabitCard implements ActionListener {
             if (getCompletion()) {
                 // Checkbox is checked, create a new HabitRecord and save it
                 String recordId = UUID.randomUUID().toString();
-                HabitRecord newHabitRecord = new HabitRecord(recordId, habit.getId(), LocalDate.now());
+                HabitRecord newHabitRecord = new HabitRecord(recordId, habit.getId(), dashboard.getCurrentDate());
                 this.habitService.addHabitRecordToDB(newHabitRecord);
                 adjustCompletion(newHabitRecord);
                 System.out.println("Habit record added to the database.");

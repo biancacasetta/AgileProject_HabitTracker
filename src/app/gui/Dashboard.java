@@ -13,11 +13,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.List;
+import java.time.LocalDate;
 
 public class Dashboard extends JFrame implements ActionListener {
     //UI components
     private JPanel dateHeader;
-    private LocalDateTime currentDate;
+    private LocalDate currentDate;
     private JLabel today;
     private JButton previousDay;
     private JButton nextDay;
@@ -43,7 +44,7 @@ public class Dashboard extends JFrame implements ActionListener {
     public Dashboard() {
         //initialise class instances
         this.habitService = new HabitService();
-        this.currentDate = LocalDateTime.now();
+        this.currentDate = LocalDate.now();
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
         this.setResizable(false);
@@ -60,6 +61,11 @@ public class Dashboard extends JFrame implements ActionListener {
     }
     public JLabel getProgressLabel() {
         return this.progressLabel;
+    }
+
+    //getter for selected date
+    public LocalDate getCurrentDate() {
+        return currentDate;
     }
 
     private void createUIComponents() {
@@ -127,7 +133,7 @@ public class Dashboard extends JFrame implements ActionListener {
 
             //Habits Container
             habitsContainer.removeAll();
-            addHabitList(habitService.getAllHabitsFromDB());//getting habits from DB
+            addHabitList(habitService.getAllHabitsFromDB(), this.currentDate);//getting habits from DB
             updateProgressBar();
             getContentPane().add(scrollPane);
 
@@ -156,11 +162,11 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     //Method that adds list of habits from the DB and associated completion status to the dashboard
-    public void addHabitList(List<Habit> habits) {
+    public void addHabitList(List<Habit> habits, LocalDate selectedDate) {
         List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
             // Find the associated habit record
-            HabitRecord habitRecord = findHabitRecordForHabit(habit, habitRecords);
+            HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
             // Create a new HabitCard with the habit and its associated habit record
             HabitCard hc = new HabitCard(habit, habitRecord, this);
             // Update checkbox status based on completion status from database
@@ -171,9 +177,10 @@ public class Dashboard extends JFrame implements ActionListener {
         }
     }
 
-    private HabitRecord findHabitRecordForHabit(Habit habit, List<HabitRecord> habitRecords) {
+    // Method that looks for habit record based on association with a habit and selected date
+    private HabitRecord findHabitRecordForHabit(Habit habit, LocalDate selectedDate, List<HabitRecord> habitRecords) {
         for (HabitRecord record : habitRecords) {
-            if (record.getHabitId().equals(habit.getId())) {
+            if (record.getHabitId().equals(habit.getId()) && record.getCompletionDate().equals(selectedDate)) {
                 return record; // Return the habit record if found
             }
         }
@@ -181,7 +188,7 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
 
-    private String formatDate(LocalDateTime date) {
+    private String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.ENGLISH);
         return date.format(formatter);
     }
@@ -227,6 +234,19 @@ public class Dashboard extends JFrame implements ActionListener {
         });
     }
 
+    // Method to update the habit list based on the selected date
+    private void updateHabitList(LocalDate selectedDate) {
+        // Remove all components from habitsContainer
+        habitsContainer.removeAll();
+        // Add habit list based on the current date
+        addHabitList(habitService.getAllHabitsFromDB(), selectedDate);
+        // Update progress bar
+        updateProgressBar();
+        // Repaint the GUI
+        getContentPane().revalidate();
+        getContentPane().repaint();
+    }
+
     public void updateProgressBar() {
         // Update progress bar
         this.getProgress().setValue(calculateCompletionPercentage());
@@ -239,10 +259,12 @@ public class Dashboard extends JFrame implements ActionListener {
         if (e.getSource() == this.previousDay) {
             this.currentDate = this.currentDate.minusDays(1);
             this.today.setText(this.formatDate(this.currentDate));
+            updateHabitList(this.currentDate);
 
         } else if (e.getSource() == this.nextDay) {
             this.currentDate = this.currentDate.plusDays(1);
             this.today.setText(this.formatDate(this.currentDate));
+            updateHabitList(this.currentDate);
 
         } else if (e.getSource() == this.newHabitButton) {
             HabitCreation hc = new HabitCreation(this, this.habitService);
