@@ -5,6 +5,9 @@ import app.model.HabitRecord;
 import app.model.HabitService;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +19,9 @@ public class HabitCard implements ActionListener {
 
     private Dashboard dashboard;
     JPanel innerPanel;
+    private JPanel text;
     private JTextArea name;
+    private JTextArea description;
     private JCheckBox checkbox;
     private JButton editButton;
     private JButton deleteButton;
@@ -31,14 +36,19 @@ public class HabitCard implements ActionListener {
         this.habitRecord = habitRecord; // Assign habit record
         this.dashboard = dashboard;
         this.innerPanel = new JPanel(new BorderLayout());
+        this.text = new JPanel();
+        this.text.setLayout(new BoxLayout(this.text, BoxLayout.Y_AXIS));
         this.name = new JTextArea(habit.getName());
+        this.description = new JTextArea(habit.getDesc());
         this.checkbox = new JCheckBox();
 
         //adding buttons for edit and delete
         this.editButton = new JButton(new ImageIcon("icons/edit.png"));
         this.deleteButton = new JButton(new ImageIcon("icons/delete.png"));
 
-        this.innerPanel.add(name, BorderLayout.WEST);
+        this.text.add(name);
+        this.text.add(description);
+        this.innerPanel.add(this.text, BorderLayout.WEST);
         this.innerPanel.add(checkbox, BorderLayout.EAST);
 
         adjustCompletion(this.habitRecord);
@@ -68,15 +78,25 @@ public class HabitCard implements ActionListener {
         innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         this.innerPanel.setMaximumSize(new Dimension(380, 50));
 
+        //Text
+        this.text.setBackground(Color.BLUE);
+
         //Title
-        //name.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-        name.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
+        name.setFont(new Font("Arial", Font.BOLD, 15));
         name.setForeground(Color.WHITE);
         //properties of the JTextArea
         this.name.setEditable(false); // Make JTextArea non-editable
         this.name.setOpaque(false); // Make JTextArea transparent
         this.name.setLineWrap(true); // Enable text wrapping
         this.name.setWrapStyleWord(true); // Wrap at word boundaries
+
+        //Description
+        description.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        description.setForeground(Color.WHITE);
+        this.description.setEditable(false); // Make JTextArea non-editable
+        this.description.setOpaque(false); // Make JTextArea transparent
+        this.description.setLineWrap(true); // Enable text wrapping
+        this.description.setWrapStyleWord(true); // Wrap at word boundaries
 
         //Checkbox
         checkbox.setBackground(Color.BLUE);

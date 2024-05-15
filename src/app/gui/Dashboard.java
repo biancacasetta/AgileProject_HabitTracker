@@ -1,8 +1,10 @@
 package app.gui;
 
+import app.dao.ProfileDAO;
 import app.model.Habit;
 import app.model.HabitService;
 import app.model.HabitRecord;
+import app.model.Profile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +35,7 @@ public class Dashboard extends JFrame implements ActionListener {
 
     //instantiate other necessary classes
     private HabitService habitService;
+    private ProfileDAO profileDAO;
 
     private HabitCard currentHabitCard;
 
@@ -44,6 +47,7 @@ public class Dashboard extends JFrame implements ActionListener {
     public Dashboard() {
         //initialise class instances
         this.habitService = new HabitService();
+        this.profileDAO = new ProfileDAO();
         this.currentDate = LocalDate.now();
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
@@ -152,8 +156,6 @@ public class Dashboard extends JFrame implements ActionListener {
             this.setVisible(true);
         });
     }
-
-
 
     public void refreshProgress() {
         getContentPane().add(progress);
@@ -268,6 +270,9 @@ public class Dashboard extends JFrame implements ActionListener {
 
         } else if (e.getSource() == this.newHabitButton) {
             HabitCreation hc = new HabitCreation(this, this.habitService);
+        } else if (e.getSource() == this.profileButton) {
+            Profile profile = new Profile("123","Bianca");
+            ProfilePopup profilePopup = new ProfilePopup(this, profile);
         }
     }
 
