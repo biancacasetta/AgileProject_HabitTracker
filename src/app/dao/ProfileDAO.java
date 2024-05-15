@@ -20,11 +20,12 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "INSERT INTO profile (id, name) VALUES (?, ?);";
+            String sql = "INSERT INTO profile (id, name, photo) VALUES (?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, profile.getId());
             ps.setString(2, profile.getName());
+            ps.setString(3, profile.getProfilePicture());
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -40,7 +41,7 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "SELECT id, name FROM profile Where id = ?";
+            String sql = "SELECT id, name, photo FROM profile Where id = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, id);
@@ -49,8 +50,9 @@ public class ProfileDAO implements DAO<Profile> {
             if (rs.next()) {
                 String oid = rs.getString("id");
                 String name = rs.getString("name");
+                String photo = rs.getString("photo");
 
-                profile = new Profile(oid, name);
+                profile = new Profile(oid, name, photo);
             }
 
         } catch (SQLException | IOException e) {
@@ -66,19 +68,21 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "SELECT id, name FROM profile";
+            String sql = "SELECT id, name, photo FROM profile";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             String id;
             String name;
+            String photo;
 
             while (rs.next()) {
                 id = rs.getString("id");
                 name = rs.getString("name");
+                photo = rs.getString("photo");
 
-                Profile profile = new Profile(id, name);
+                Profile profile = new Profile(id, name, photo);
                 profilesList.add(profile);
             }
 
@@ -95,11 +99,12 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "UPDATE profile SET name=? WHERE id=?";
+            String sql = "UPDATE profile SET name=?, photo=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, profile.getName());
-            ps.setString(2, profile.getId());
+            ps.setString(2, profile.getProfilePicture());
+            ps.setString(3, profile.getId());
             result = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {

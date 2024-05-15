@@ -1,15 +1,17 @@
 package app.model;
 
+import java.io.File;
+
 public class Profile {
 
     private String id;
     private String name;
-    //private String profilePicture;
+    private String profilePicture;
 
-    public Profile(String id, String name) {
+    public Profile(String id, String name, String profilePicture) {
         this.id = id;
         this.name = name;
-        //this.profilePicture = profilePicture;
+        this.profilePicture = profilePicture;
     }
 
     public String getId() {
@@ -28,7 +30,6 @@ public class Profile {
         this.name = name;
     }
 
-    /*
     public String getProfilePicture() {
         return profilePicture;
     }
@@ -36,5 +37,4 @@ public class Profile {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
-    */
 }

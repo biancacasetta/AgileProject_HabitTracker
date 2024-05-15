@@ -19,6 +19,8 @@ import java.time.LocalDate;
 
 public class Dashboard extends JFrame implements ActionListener {
     //UI components
+    private JPanel userProfile;
+    private JLabel profilePicture;
     private JLabel greeting;
     private JPanel dateHeader;
     private LocalDate currentDate;
@@ -50,7 +52,7 @@ public class Dashboard extends JFrame implements ActionListener {
         //initialise class instances
         this.habitService = new HabitService();
         this.profileDAO = new ProfileDAO();
-        this.profile = new Profile("123","Bianca"); //hardcoded for now. get from DB.
+        this.profile = profileDAO.get("1");
         this.currentDate = LocalDate.now();
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
@@ -76,6 +78,20 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
+        //User Profile
+        this.userProfile = new JPanel(new BorderLayout());
+        this.userProfile.setMaximumSize(new Dimension(400, 50));
+
+        //Profile Picture
+        this.profilePicture = new JLabel();
+        this.profilePicture.setPreferredSize(new Dimension(30,30));
+        ImageIcon profileIcon = new ImageIcon(this.profile.getProfilePicture());
+        Image profilePic = profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon scaledProfileIcon = new ImageIcon(profilePic);
+        this.profilePicture.setIcon(scaledProfileIcon);
+
+        this.profilePicture.setBackground(Color.GREEN);
+
         //Greeting
         this.greeting = new JLabel(String.format("Hello, %s!", this.profile.getName()));
         this.greeting.setFont(new Font("Arial", Font.BOLD, 20));
@@ -136,8 +152,10 @@ public class Dashboard extends JFrame implements ActionListener {
 
     public void displayGUI() {
         SwingUtilities.invokeLater(() -> {
-            //Greeting
-            getContentPane().add(this.greeting);
+            //User Profile
+            this.userProfile.add(this.profilePicture, BorderLayout.WEST);
+            this.userProfile.add(this.greeting, BorderLayout.CENTER);
+            getContentPane().add(this.userProfile);
 
             //Header
             this.dateHeader.add(previousDay, BorderLayout.WEST);
@@ -281,7 +299,7 @@ public class Dashboard extends JFrame implements ActionListener {
         } else if (e.getSource() == this.newHabitButton) {
             HabitCreation hc = new HabitCreation(this, this.habitService);
         } else if (e.getSource() == this.profileButton) {
-            ProfilePopup profilePopup = new ProfilePopup(this, profile);
+            ProfilePopup profilePopup = new ProfilePopup(this.profile, this.profileDAO);
             this.refreshUI();
         } else if (e.getSource() == this.statsButton) {
             StatisticsPopUp statisticsPopUp = new StatisticsPopUp(this.habitService);
