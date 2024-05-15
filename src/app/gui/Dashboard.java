@@ -95,6 +95,7 @@ public class Dashboard extends JFrame implements ActionListener {
         //Greeting
         this.greeting = new JLabel(String.format("Hello, %s!", this.profile.getName()));
         this.greeting.setFont(new Font("Arial", Font.BOLD, 20));
+        this.greeting.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
 
         //Date Header
         this.dateHeader = new JPanel(new BorderLayout());

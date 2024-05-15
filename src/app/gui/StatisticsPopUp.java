@@ -1,12 +1,16 @@
 package app.gui;
 
 import app.model.Habit;
+import app.model.HabitRecord;
 import app.model.HabitService;
 import app.gui.HabitStatsCard;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.List;
 
 public class StatisticsPopUp extends JDialog implements ActionListener {
 
