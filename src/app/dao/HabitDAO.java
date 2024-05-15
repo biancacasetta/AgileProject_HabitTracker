@@ -119,8 +119,8 @@ public class HabitDAO implements DAO<Habit> {
             ps.setString(1, habit.getName());
             ps.setString(2, habit.getDesc());
             ps.setBoolean(3, habit.getIsActive());
-            ps.setString(4, habit.getId());
             ps.setString(5, habit.getCreationDate().toString());
+            ps.setString(4, habit.getId());
             result = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {

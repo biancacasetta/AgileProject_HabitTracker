@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.DBConnection;
+import app.model.Habit;
 import app.model.Profile;
 
 import java.io.IOException;
@@ -8,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileDAO implements DAO<Profile> {
@@ -22,7 +25,6 @@ public class ProfileDAO implements DAO<Profile> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, profile.getId());
             ps.setString(2, profile.getName());
-            //ps.setString(3, profile.getPicture());
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -60,7 +62,31 @@ public class ProfileDAO implements DAO<Profile> {
 
     @Override
     public List<Profile> getAll() {
-        return null;
+        List<Profile> profilesList = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT id, name FROM profile";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            String id;
+            String name;
+
+            while (rs.next()) {
+                id = rs.getString("id");
+                name = rs.getString("name");
+
+                Profile profile = new Profile(id, name);
+                profilesList.add(profile);
+            }
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return profilesList;
     }
 
     @Override

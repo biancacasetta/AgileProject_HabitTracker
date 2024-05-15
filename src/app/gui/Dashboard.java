@@ -19,6 +19,7 @@ import java.time.LocalDate;
 
 public class Dashboard extends JFrame implements ActionListener {
     //UI components
+    private JLabel greeting;
     private JPanel dateHeader;
     private LocalDate currentDate;
     private JLabel today;
@@ -36,6 +37,7 @@ public class Dashboard extends JFrame implements ActionListener {
     //instantiate other necessary classes
     private HabitService habitService;
     private ProfileDAO profileDAO;
+    private Profile profile;
 
     private HabitCard currentHabitCard;
 
@@ -48,6 +50,7 @@ public class Dashboard extends JFrame implements ActionListener {
         //initialise class instances
         this.habitService = new HabitService();
         this.profileDAO = new ProfileDAO();
+        this.profile = new Profile("123","Bianca"); //hardcoded for now. get from DB.
         this.currentDate = LocalDate.now();
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
@@ -73,6 +76,10 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
+        //Greeting
+        this.greeting = new JLabel(String.format("Hello, %s!", this.profile.getName()));
+        this.greeting.setFont(new Font("Arial", Font.BOLD, 20));
+
         //Date Header
         this.dateHeader = new JPanel(new BorderLayout());
         this.dateHeader.setMinimumSize(new Dimension(400, 30));
@@ -129,6 +136,9 @@ public class Dashboard extends JFrame implements ActionListener {
 
     public void displayGUI() {
         SwingUtilities.invokeLater(() -> {
+            //Greeting
+            getContentPane().add(this.greeting);
+
             //Header
             this.dateHeader.add(previousDay, BorderLayout.WEST);
             this.dateHeader.add(today, BorderLayout.CENTER);
@@ -271,8 +281,10 @@ public class Dashboard extends JFrame implements ActionListener {
         } else if (e.getSource() == this.newHabitButton) {
             HabitCreation hc = new HabitCreation(this, this.habitService);
         } else if (e.getSource() == this.profileButton) {
-            Profile profile = new Profile("123","Bianca");
             ProfilePopup profilePopup = new ProfilePopup(this, profile);
+            this.refreshUI();
+        } else if (e.getSource() == this.statsButton) {
+            StatisticsPopUp statisticsPopUp = new StatisticsPopUp(this.habitService);
         }
     }
 

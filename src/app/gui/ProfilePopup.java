@@ -31,7 +31,7 @@ public class ProfilePopup extends JDialog implements ActionListener {
         cancelButton = new JButton("CANCEL");
 
         this.setTitle("User Profile");
-        this.setSize(400, 400);
+        this.setSize(400, 200);
         this.setResizable(false);
         this.setModal(true);
         this.setLocationRelativeTo(null);
