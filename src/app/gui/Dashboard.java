@@ -196,15 +196,18 @@ public class Dashboard extends JFrame implements ActionListener {
     public void addHabitList(List<Habit> habits, LocalDate selectedDate) {
         List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
-            // Find the associated habit record
-            HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
-            // Create a new HabitCard with the habit and its associated habit record
-            HabitCard hc = new HabitCard(habit, habitRecord, this);
-            // Update checkbox status based on completion status from database
-            hc.adjustCompletion(habitRecord);
-            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-            this.habitsContainer.add(hc.innerPanel);
-            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+            // Check if the habit's creationDate is before or equal to the selectedDate
+            if (habit.getCreationDate().compareTo(selectedDate) <= 0) {
+                // Find the associated habit record
+                HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
+                // Create a new HabitCard with the habit and its associated habit record
+                HabitCard hc = new HabitCard(habit, habitRecord, this);
+                // Update checkbox status based on completion status from database
+                hc.adjustCompletion(habitRecord);
+                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+                this.habitsContainer.add(hc.innerPanel);
+                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
         }
     }
 
