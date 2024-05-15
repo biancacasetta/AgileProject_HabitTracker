@@ -1,0 +1,190 @@
+@startuml
+class HabitRecordDAO {
+    public int insert(HabitRecord habitRecord) {
+    public HabitRecord get(String id) { //changed to string
+    public List<HabitRecord> getAll() {
+    public int update(HabitRecord habitRecord) {
+    public int delete(HabitRecord habitRecord) {
+    public int delete(String id) {
+}
+DAO <|.. HabitRecordDAO
+class HabitDAO {
+    public int insert(Habit habit) {
+    public Habit get(String id) { //changed to string
+    public List<Habit> getAll() {
+    public int update(Habit habit) {
+    public int delete(Habit habit) {
+    public int delete(String id) {
+    public int clearFromTable(Habit habit) {
+}
+DAO <|.. HabitDAO
+class DAO<T> {
+}
+class Demo {
+    public static void main(String[] args) {
+}
+class DBConnection {
+    public static Connection getConnection() throws SQLException, IOException {
+}
+class Main {
+    public static void main(String[] args) {
+}
+class HabitCard {
+    private Dashboard dashboard;
+    private JTextArea name;
+    private JCheckBox checkbox;
+    private JButton editButton;
+    private JButton deleteButton;
+    private HabitService habitService;
+    private Habit habit;
+    private HabitRecord habitRecord;
+    public HabitCard(Habit habit, HabitRecord habitRecord, Dashboard dashboard) {
+    public boolean getCompletion() {
+    public void adjustCompletion(HabitRecord habitRecord) {
+    private void styleUIComponents() {
+    public void actionPerformed(ActionEvent e) {
+}
+ActionListener <|.. HabitCard
+HabitCard --> Dashboard : has-a
+HabitCard --> HabitService : has-a
+HabitCard --> Habit : has-a
+HabitCard --> HabitRecord : has-a
+class Dashboard {
+    private JPanel dateHeader;
+    private LocalDate currentDate;
+    private JLabel today;
+    private JButton previousDay;
+    private JButton nextDay;
+    private JProgressBar progress;
+    private JLabel progressLabel;
+    private JScrollPane scrollPane;
+    private JPanel habitsContainer;
+    private JPanel tabFooter;
+    private JButton statsButton;
+    private JButton newHabitButton;
+    private JButton profileButton;
+    private HabitService habitService;
+    private HabitCard currentHabitCard;
+    private HabitRecord habitRecord;
+    public Dashboard() {
+    public JProgressBar getProgress() {
+    public JLabel getProgressLabel() {
+    public LocalDate getCurrentDate() {
+    private void createUIComponents() {
+    public void displayGUI() {
+    public void refreshProgress() {
+    public void addHabitList(List<Habit> habits, LocalDate selectedDate) {
+    private HabitRecord findHabitRecordForHabit(Habit habit, LocalDate selectedDate, List<HabitRecord> habitRecords) {
+    private String formatDate(LocalDate date) {
+    public int calculateCompletionPercentage() {
+    public void refreshUI() {
+    private void updateHabitList(LocalDate selectedDate) {
+    public void updateProgressBar() {
+    public void actionPerformed(ActionEvent e) {
+}
+JFrame <|-- Dashboard
+ActionListener <|.. Dashboard
+Dashboard --> HabitService : has-a
+Dashboard --> HabitCard : has-a
+Dashboard --> HabitRecord : has-a
+class HabitCreation {
+    private Dashboard dashboard;
+    private HabitService habitService;
+    private Habit habit;
+    private JPanel habitForm;
+    private JLabel nameLabel;
+    private JTextField nameField;
+    private JLabel descriptionLabel;
+    private JTextField descriptionField;
+    private JPanel buttons;
+    private JButton addButton;
+    private JButton cancelButton;
+    private boolean isEditing;
+    public HabitCreation(Dashboard dashboard, HabitService habitService) {
+    public HabitCreation(Dashboard dashboard, HabitService habitService, Habit habit) {
+    private void styleUIComponents() {
+    private void displayGUI() {
+    public void setEditMode() {
+    public void actionPerformed(ActionEvent e) {
+}
+JDialog <|-- HabitCreation
+ActionListener <|.. HabitCreation
+HabitCreation --> Dashboard : has-a
+HabitCreation --> HabitService : has-a
+HabitCreation --> Habit : has-a
+class DeletionPopUp {
+    private Dashboard dashboard;
+    private HabitService habitService;
+    private Habit habit;
+    private JPanel deleteWindow;
+    private JPanel textPanel;
+    private JLabel deleteText;
+    private JPanel buttons;
+    private JButton deleteButton;
+    private JButton cancelButton;
+    public Boolean deleted = false;
+    public DeletionPopUp(Dashboard dashboard, HabitService habitService, Habit habit) {
+    private void styleUIComponents(){
+    private void displayGUI(){
+    public void actionPerformed(ActionEvent e) {
+}
+JDialog <|-- DeletionPopUp
+ActionListener <|.. DeletionPopUp
+DeletionPopUp --> Dashboard : has-a
+DeletionPopUp --> HabitService : has-a
+DeletionPopUp --> Habit : has-a
+class Habit {
+    private String id;
+    private String name;
+    private String desc;
+    private boolean isActive;
+    private LocalDate creationDate;
+    public String getName() {
+    public String getDesc() {
+    public String getId() {
+    public Boolean getIsActive(){
+    public void setName(String name) {
+    public void setDesc(String desc) {
+    public void setId(String id) {
+    public void setIsActive(Boolean bool) {
+    public boolean equals(Object o) {
+    public String toString() {
+    public Habit(String id, String name, String desc, Boolean isActive, LocalDate creationDate) {
+    public LocalDate getCreationDate() {
+    public void setCreationDate(LocalDate creationDate) {
+}
+class HabitRecord {
+    private String recordId; //change to string cause UUID
+    private String habitId; //change to string cause UUID
+    private LocalDate completionDate;
+    public HabitRecord(String recordId, String habitId, LocalDate completionDate) {
+    public String getRecordId() {
+    public void setRecordId(String recordId) {
+    public String getHabitId() {
+    public void setHabitId(String habitId) {
+    public LocalDate getCompletionDate() {
+    public String toString() {
+    public void setCompletionDate(LocalDate completionDate) {
+}
+class HabitService {
+    private HabitDAO habitDAO;
+    private HabitRecordDAO habitRecordDAO;
+    public HabitService() {
+    public ArrayList<Habit> getListOfHabits() {
+    public void addHabit(Habit habit) {listOfHabits.add(habit);
+    public void deleteHabit(String hn) {
+    public Habit getHabitFromList(String name) {
+    public void editHabit(Habit habitToEdit) {
+    public void addHabitToDB(Habit newHabit) {
+    public void editHabitInDB(Habit editHabit) {habitDAO.update(editHabit);}
+    public Habit getHabitFromDB(String id) {
+    public List<Habit> getAllHabitsFromDB() {
+    public void deleteHabitFromDB(String id) {
+    public void addHabitRecordToDB(HabitRecord completedHabit) {
+    public void deleteHabitRecordFromDB(HabitRecord uncompletedHabit) {
+    public HabitRecord getHabitRecordFromDB(String recordId) {
+    public List<HabitRecord> getAllHabitRecordsFromDB() {
+}
+HabitService --> HabitDAO : has-a
+HabitService --> HabitRecordDAO : has-a
+@enduml
