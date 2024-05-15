@@ -1,8 +1,10 @@
 package app.gui;
 
+import app.dao.ProfileDAO;
 import app.model.Habit;
 import app.model.HabitService;
 import app.model.HabitRecord;
+import app.model.Profile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +19,9 @@ import java.time.LocalDate;
 
 public class Dashboard extends JFrame implements ActionListener {
     //UI components
+    private JPanel userProfile;
+    private JLabel profilePicture;
+    private JLabel greeting;
     private JPanel dateHeader;
     private LocalDate currentDate;
     private JLabel today;
@@ -33,6 +38,8 @@ public class Dashboard extends JFrame implements ActionListener {
 
     //instantiate other necessary classes
     private HabitService habitService;
+    private ProfileDAO profileDAO;
+    private Profile profile;
 
     private HabitCard currentHabitCard;
 
@@ -44,6 +51,8 @@ public class Dashboard extends JFrame implements ActionListener {
     public Dashboard() {
         //initialise class instances
         this.habitService = new HabitService();
+        this.profileDAO = new ProfileDAO();
+        this.profile = profileDAO.get("1");
         this.currentDate = LocalDate.now();
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
@@ -69,6 +78,25 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
+        //User Profile
+        this.userProfile = new JPanel(new BorderLayout());
+        this.userProfile.setMaximumSize(new Dimension(400, 50));
+
+        //Profile Picture
+        this.profilePicture = new JLabel();
+        this.profilePicture.setPreferredSize(new Dimension(30,30));
+        ImageIcon profileIcon = new ImageIcon(this.profile.getProfilePicture());
+        Image profilePic = profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon scaledProfileIcon = new ImageIcon(profilePic);
+        this.profilePicture.setIcon(scaledProfileIcon);
+
+        this.profilePicture.setBackground(Color.GREEN);
+
+        //Greeting
+        this.greeting = new JLabel(String.format("Hello, %s!", this.profile.getName()));
+        this.greeting.setFont(new Font("Arial", Font.BOLD, 20));
+        this.greeting.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+
         //Date Header
         this.dateHeader = new JPanel(new BorderLayout());
         this.dateHeader.setMinimumSize(new Dimension(400, 30));
@@ -125,6 +153,11 @@ public class Dashboard extends JFrame implements ActionListener {
 
     public void displayGUI() {
         SwingUtilities.invokeLater(() -> {
+            //User Profile
+            this.userProfile.add(this.profilePicture, BorderLayout.WEST);
+            this.userProfile.add(this.greeting, BorderLayout.CENTER);
+            getContentPane().add(this.userProfile);
+
             //Header
             this.dateHeader.add(previousDay, BorderLayout.WEST);
             this.dateHeader.add(today, BorderLayout.CENTER);
@@ -153,8 +186,6 @@ public class Dashboard extends JFrame implements ActionListener {
         });
     }
 
-
-
     public void refreshProgress() {
         getContentPane().add(progress);
         getContentPane().add(progressLabel);
@@ -165,18 +196,15 @@ public class Dashboard extends JFrame implements ActionListener {
     public void addHabitList(List<Habit> habits, LocalDate selectedDate) {
         List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
-            // Check if the habit's creationDate is before or equal to the selectedDate
-            if (habit.getCreationDate().compareTo(selectedDate) <= 0) {
-                // Find the associated habit record
-                HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
-                // Create a new HabitCard with the habit and its associated habit record
-                HabitCard hc = new HabitCard(habit, habitRecord, this);
-                // Update checkbox status based on completion status from database
-                hc.adjustCompletion(habitRecord);
-                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-                this.habitsContainer.add(hc.innerPanel);
-                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-            }
+            // Find the associated habit record
+            HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
+            // Create a new HabitCard with the habit and its associated habit record
+            HabitCard hc = new HabitCard(habit, habitRecord, this);
+            // Update checkbox status based on completion status from database
+            hc.adjustCompletion(habitRecord);
+            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+            this.habitsContainer.add(hc.innerPanel);
+            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         }
     }
 
@@ -271,6 +299,11 @@ public class Dashboard extends JFrame implements ActionListener {
 
         } else if (e.getSource() == this.newHabitButton) {
             HabitCreation hc = new HabitCreation(this, this.habitService);
+        } else if (e.getSource() == this.profileButton) {
+            ProfilePopup profilePopup = new ProfilePopup(this.profile, this.profileDAO);
+            this.refreshUI();
+        } else if (e.getSource() == this.statsButton) {
+            StatisticsPopUp statisticsPopUp = new StatisticsPopUp(this.habitService);
         }
     }
 
