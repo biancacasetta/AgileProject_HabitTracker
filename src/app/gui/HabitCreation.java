@@ -1,4 +1,5 @@
 package app.gui;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import app.model.Habit;
@@ -122,7 +123,7 @@ public class HabitCreation extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton) {
             if (isEditing) {
-                Habit editHabit = new Habit(habit.getId(), nameField.getText(), descriptionField.getText(), true);
+                Habit editHabit = new Habit(habit.getId(), nameField.getText(), descriptionField.getText(), true, LocalDate.now());
                 this.habitService.editHabit(editHabit);
                 this.habitService.editHabitInDB(editHabit);
                 System.out.println("Habit edited");
@@ -130,7 +131,7 @@ public class HabitCreation extends JDialog implements ActionListener {
             } else {
                 //generate a unique ID
                 String id = UUID.randomUUID().toString();
-                Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText(), true);
+                Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText(), true, LocalDate.now());
                 this.habitService.addHabit(newHabit);
                 //DB insertion
                 this.habitService.addHabitToDB(newHabit);

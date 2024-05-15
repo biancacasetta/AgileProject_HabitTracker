@@ -25,16 +25,16 @@ public class Demo {
             if (con != null) {
                 System.out.println("Connection successful");
 
-                Habit habitToInsert = new Habit("2", "Do sports", "do 1000 squats", true);
-                HabitRecord habitRecord = new HabitRecord(
-                        "2",
-                        "5",
+                Habit habitToInsert = new Habit("2", "Do sports", "do 1000 squats", true, LocalDate.now());
+//                HabitRecord habitRecord = new HabitRecord(
+//                        "2",
+//                        "5",
 
-                LocalDate.parse("2024-05-02")); //change to LocalDate
+                LocalDate.parse("2024-05-02"); //change to LocalDate
 //                Habit habit = habitDAO.get(1);
 //                System.out.println(habit);
 
-//                habitDAO.insert(habitToInsert);
+                habitDAO.insert(habitToInsert);
 //                habitDAO.update(habitToInsert);
 //                habitDAO.delete(habitToInsert);
 
@@ -43,10 +43,10 @@ public class Demo {
 
 //                habitRecordDAO.insert(habitRecord);
 //                habitRecordDAO.update(habitRecord);
-                habitRecordDAO.delete(habitRecord);
+//                habitRecordDAO.delete(habitRecord);
 
-                List<HabitRecord> habitRecordsList = habitRecordDAO.getAll();
-                habitRecordsList.forEach(System.out::println);
+//                List<HabitRecord> habitRecordsList = habitRecordDAO.getAll();
+//                habitRecordsList.forEach(System.out::println);
 
                 // Habit object needs to have and id
                 //

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 
 class HabitServiceTest {
 
@@ -24,7 +26,7 @@ class HabitServiceTest {
 
       Habit res = habitServiceClass.getListOfHabits().getLast();
 
-      Habit exp = new Habit("3", "Meditate", "meditate for 10 minutes", true);
+      Habit exp = new Habit("3", "Meditate", "meditate for 10 minutes", true, LocalDate.now());
 
       // expected is the last habit that was added
 
@@ -48,7 +50,7 @@ class HabitServiceTest {
 
     // using the getHabitFromList() method to retrieve a Habit
     Habit res = habitServiceClass.getHabitFromList("Do sports");
-    Habit exp = new Habit("2", "Do sports", "run a 10k", true);
+    Habit exp = new Habit("2", "Do sports", "run a 10k", true, LocalDate.now());
 
     Assertions.assertEquals(res, exp);
 
@@ -57,9 +59,9 @@ class HabitServiceTest {
 
   private HabitService habitServiceSetup() {
     HabitService habitServiceClass = new HabitService();
-    Habit habit1 = new Habit("1", "Drink water", "drink 1000ml of water", true);
-    Habit habit2 = new Habit("2", "Do sports", "run a 10k", true);
-    Habit habit3 = new Habit("3", "Meditate", "meditate for 10 minutes", true);
+    Habit habit1 = new Habit("1", "Drink water", "drink 1000ml of water", true, LocalDate.now());
+    Habit habit2 = new Habit("2", "Do sports", "run a 10k", true, LocalDate.now());
+    Habit habit3 = new Habit("3", "Meditate", "meditate for 10 minutes", true, LocalDate.now());
     habitServiceClass.addHabit(habit1);
     habitServiceClass.addHabit(habit2);
     habitServiceClass.addHabit(habit3);

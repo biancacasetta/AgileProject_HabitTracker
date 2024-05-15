@@ -2,14 +2,9 @@ package app.dao;
 
 import app.model.HabitRecord;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import app.dao.HabitRecordDAO;
-import app.model.HabitRecord;
 import app.model.Habit;
-import app.dao.HabitDAO;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +35,7 @@ class HabitRecordDAOTest {
     @Test
     void insert() {
         //Create habit
-        Habit habit = new Habit("101", "Drink water", "Drink more water", true);
+        Habit habit = new Habit("101", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit);
 
         //Create habit record
@@ -57,7 +52,7 @@ class HabitRecordDAOTest {
     @Test
     void get() {
         //Create habit
-        Habit habit = new Habit("102", "Drink water", "Drink more water", true);
+        Habit habit = new Habit("102", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit);
 
         //Create habit record and insert into table
@@ -74,9 +69,9 @@ class HabitRecordDAOTest {
     @Test
     void getAll() {
         //Create habits
-        Habit habit = new Habit("103", "Drink water", "Drink more water", true);
+        Habit habit = new Habit("103", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit);
-        Habit habit2 = new Habit("104", "Drink water", "Drink more water", true);
+        Habit habit2 = new Habit("104", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit2);
 
         //Create habit records and insert into table
@@ -99,7 +94,7 @@ class HabitRecordDAOTest {
     @Test
     void update() {
         //Create habit
-        Habit habit = new Habit("105", "Drink water", "Drink more water", true);
+        Habit habit = new Habit("105", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit);
 
         //Create habit records and insert into table
@@ -118,7 +113,7 @@ class HabitRecordDAOTest {
     @Test
     void delete() {
         //Create habit
-        Habit habit = new Habit("106", "Drink water", "Drink more water", true);
+        Habit habit = new Habit("106", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit);
 
         //Create habit records and insert into table

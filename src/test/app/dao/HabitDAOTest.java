@@ -2,10 +2,9 @@ package app.dao;
 
 import app.model.Habit;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import app.dao.HabitDAO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ class HabitDAOTest {
     @Test
     void insert() {
         //Create a new habit
-        Habit habit = new Habit("100", "Drink water", "Drink more water", true);
+        Habit habit = new Habit("100", "Drink water", "Drink more water", true, LocalDate.now());
         testHabits.add(habit);
         int res = hDAO.insert(habit);
         int exp = 1;
@@ -41,7 +40,7 @@ class HabitDAOTest {
     @Test
     void get() {
         //Create a new habit and insert
-        Habit exp = new Habit("101", "Eat 200 eggs", "GET YOUR PROTEIN", true);
+        Habit exp = new Habit("101", "Eat 200 eggs", "GET YOUR PROTEIN", true, LocalDate.now());
         testHabits.add(exp);
         hDAO.insert(exp);
 
@@ -53,8 +52,8 @@ class HabitDAOTest {
 
     @Test
     void getAll() {
-        Habit h1 = new Habit("102", "go poopy", "", true);
-        Habit h2 = new Habit("103", "go peepee", "", true);
+        Habit h1 = new Habit("102", "go poopy", "", true, LocalDate.now());
+        Habit h2 = new Habit("103", "go peepee", "", true, LocalDate.now());
         testHabits.add(h1);
         testHabits.add(h2);
 
@@ -72,13 +71,13 @@ class HabitDAOTest {
     @Test
     void update() {
         //Create habit and insert into table
-        Habit habit = new Habit("104", "sleeeeep", "Sleep is good for your health", true);
+        Habit habit = new Habit("104", "sleeeeep", "Sleep is good for your health", true, LocalDate.now());
         testHabits.add(habit);
         hDAO.insert(habit);
         System.out.println(habit.getName() + habit.getDesc());
 
         //Update habit
-        Habit updatedHabit = new Habit("104", "Go sleep", "Sleep is great", true);
+        Habit updatedHabit = new Habit("104", "Go sleep", "Sleep is great", true, LocalDate.now());
         int res = hDAO.update(updatedHabit);
         int exp = 1;
 
@@ -91,8 +90,8 @@ class HabitDAOTest {
     @Test
     void delete() {
         //Create habit and insert
-        Habit h1 = new Habit("105", "Delete me", "Put me out of my misery", true);
-        Habit h2 = new Habit("106", "Go for a walk", "Sunshine and fresh air is great!", true);
+        Habit h1 = new Habit("105", "Delete me", "Put me out of my misery", true, LocalDate.now());
+        Habit h2 = new Habit("106", "Go for a walk", "Sunshine and fresh air is great!", true, LocalDate.now());
         testHabits.add(h1);
         testHabits.add(h2);
         hDAO.insert(h1);

@@ -1,13 +1,14 @@
 package app.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Habit {
     private String id;
     private String name;
     private String desc;
     private boolean isActive;
+    private LocalDate creationDate;
 
     public String getName() {
         return name;
@@ -52,17 +53,28 @@ public class Habit {
     @Override
     public String toString() {
         return "Habit{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", desc='" + desc + '\'' +
+                ", isActive=" + isActive +
+                ", creationDate=" + creationDate +
                 '}';
     }
 
-    public Habit(String id, String name, String desc, Boolean isActive) {
+    public Habit(String id, String name, String desc, Boolean isActive, LocalDate creationDate) {
         this.id = id;
         this.name = name;
         this.desc = desc;
         this.isActive = isActive;
+        this.creationDate = creationDate;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }
 
