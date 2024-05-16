@@ -28,7 +28,7 @@ class HabitDAOTest {
     @Test
     void insert() {
         //Create a new habit
-        Habit habit = new Habit("100", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit = new Habit("100", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit);
         int res = hDAO.insert(habit);
         int exp = 1;
@@ -40,7 +40,7 @@ class HabitDAOTest {
     @Test
     void get() {
         //Create a new habit and insert
-        Habit exp = new Habit("101", "Eat 200 eggs", "GET YOUR PROTEIN", true, LocalDate.now());
+        Habit exp = new Habit("101", "Eat 200 eggs", "GET YOUR PROTEIN", LocalDate.now(), null);
         testHabits.add(exp);
         hDAO.insert(exp);
 
@@ -52,8 +52,8 @@ class HabitDAOTest {
 
     @Test
     void getAll() {
-        Habit h1 = new Habit("102", "go poopy", "", true, LocalDate.now());
-        Habit h2 = new Habit("103", "go peepee", "", true, LocalDate.now());
+        Habit h1 = new Habit("102", "go poopy", "", LocalDate.now(), null);
+        Habit h2 = new Habit("103", "go peepee", "", LocalDate.now(), null);
         testHabits.add(h1);
         testHabits.add(h2);
 
@@ -71,13 +71,13 @@ class HabitDAOTest {
     @Test
     void update() {
         //Create habit and insert into table
-        Habit habit = new Habit("104", "sleeeeep", "Sleep is good for your health", true, LocalDate.now());
+        Habit habit = new Habit("104", "sleeeeep", "Sleep is good for your health", LocalDate.now(), null);
         testHabits.add(habit);
         hDAO.insert(habit);
         System.out.println(habit.getName() + habit.getDesc());
 
         //Update habit
-        Habit updatedHabit = new Habit("104", "Go sleep", "Sleep is great", true, LocalDate.now());
+        Habit updatedHabit = new Habit("104", "Go sleep", "Sleep is great", LocalDate.now(), null);
         int res = hDAO.update(updatedHabit);
         int exp = 1;
 
@@ -90,8 +90,8 @@ class HabitDAOTest {
     @Test
     void delete() {
         //Create habit and insert
-        Habit h1 = new Habit("105", "Delete me", "Put me out of my misery", true, LocalDate.now());
-        Habit h2 = new Habit("106", "Go for a walk", "Sunshine and fresh air is great!", true, LocalDate.now());
+        Habit h1 = new Habit("105", "Delete me", "Put me out of my misery", LocalDate.now(), null);
+        Habit h2 = new Habit("106", "Go for a walk", "Sunshine and fresh air is great!", LocalDate.now(), null);
         testHabits.add(h1);
         testHabits.add(h2);
         hDAO.insert(h1);

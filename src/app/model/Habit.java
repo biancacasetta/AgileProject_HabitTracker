@@ -7,8 +7,8 @@ public class Habit {
     private String id;
     private String name;
     private String desc;
-    private boolean isActive;
     private LocalDate creationDate;
+    private LocalDate deletionDate;
 
     public String getName() {
         return name;
@@ -22,10 +22,6 @@ public class Habit {
         return id;
     }
 
-    public Boolean getIsActive(){
-        return isActive;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -37,8 +33,21 @@ public class Habit {
     public void setId(String id) {
         this.id = id;
     }
-    public void setIsActive(Boolean bool) {
-        this.isActive = bool;
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public LocalDate getDeletionDate() {
+        return deletionDate;
+    }
+
+    public void setDeletionDate(LocalDate deletionDate) {
+        this.deletionDate = deletionDate;
     }
 
     @Override
@@ -46,7 +55,7 @@ public class Habit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Habit habit = (Habit) o;
-        return id == habit.id && Objects.equals(name, habit.name) && Objects.equals(desc, habit.desc);
+        return Objects.equals(id, habit.id) && Objects.equals(name, habit.name) && Objects.equals(desc, habit.desc) && Objects.equals(creationDate, habit.creationDate) && Objects.equals(deletionDate, habit.deletionDate);
     }
 
 
@@ -56,25 +65,18 @@ public class Habit {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", desc='" + desc + '\'' +
-                ", isActive=" + isActive +
                 ", creationDate=" + creationDate +
+                ", deletionDate=" + deletionDate +
                 '}';
     }
 
-    public Habit(String id, String name, String desc, Boolean isActive, LocalDate creationDate) {
+    public Habit(String id, String name, String desc, LocalDate creationDate, LocalDate deletionDate) {
         this.id = id;
         this.name = name;
         this.desc = desc;
-        this.isActive = isActive;
         this.creationDate = creationDate;
+        this.deletionDate = deletionDate;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
 }
 

@@ -2,7 +2,6 @@ package app.dao;
 
 import app.DBConnection;
 import app.model.Habit;
-import app.model.HabitRecord;
 
 import java.sql.Connection;
 
@@ -25,16 +24,16 @@ public class Demo {
             if (con != null) {
                 System.out.println("Connection successful");
 
-                Habit habitToInsert = new Habit("2", "Do sports", "do 1000 squats", true, LocalDate.now());
+                Habit habitToInsert = new Habit("45", "Do sports", "do 1000 squats", LocalDate.now(), null);
 //                HabitRecord habitRecord = new HabitRecord(
 //                        "2",
 //                        "5",
+//                LocalDate.parse("2024-05-02"); //change to LocalDate
 
-                LocalDate.parse("2024-05-02"); //change to LocalDate
 //                Habit habit = habitDAO.get(1);
 //                System.out.println(habit);
 
-                habitDAO.insert(habitToInsert);
+//                habitDAO.insert(habitToInsert);
 //                habitDAO.update(habitToInsert);
 //                habitDAO.delete(habitToInsert);
 

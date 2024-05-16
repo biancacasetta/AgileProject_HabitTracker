@@ -123,7 +123,7 @@ public class HabitCreation extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton) {
             if (isEditing) {
-                Habit editHabit = new Habit(habit.getId(), nameField.getText(), descriptionField.getText(), true, LocalDate.now());
+                Habit editHabit = new Habit(habit.getId(), nameField.getText(), descriptionField.getText(), LocalDate.now(), null);
                 this.habitService.editHabit(editHabit);
                 this.habitService.editHabitInDB(editHabit);
                 System.out.println("Habit edited");
@@ -131,7 +131,7 @@ public class HabitCreation extends JDialog implements ActionListener {
             } else {
                 //generate a unique ID
                 String id = UUID.randomUUID().toString();
-                Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText(), true, LocalDate.now());
+                Habit newHabit = new Habit(id, nameField.getText(), descriptionField.getText(), LocalDate.now(), null);
                 this.habitService.addHabit(newHabit);
                 //DB insertion
                 this.habitService.addHabitToDB(newHabit);

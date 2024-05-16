@@ -19,14 +19,23 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "INSERT INTO activeHabits (id, name, desc, isActive, creationDate) VALUES (?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO activeHabits (id, name, desc, creationDate, deletionDate) VALUES (?, ?, ?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getId());//changed to string
             ps.setString(2, habit.getName());
             ps.setString(3, habit.getDesc());
-            ps.setBoolean(4, habit.getIsActive());
-            ps.setString(5, habit.getCreationDate().toString());
+            ps.setString(4, habit.getCreationDate().toString());
+
+            // first checks if the deletionDate is a LocalDate or null
+            // then inserts it according to the datatype
+            LocalDate deletionDate = habit.getDeletionDate();
+            if (deletionDate != null) {
+                ps.setString(5, deletionDate.toString());
+            } else {
+                ps.setNull(5, java.sql.Types.VARCHAR);
+            }
+
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -38,11 +47,14 @@ public class HabitDAO implements DAO<Habit> {
 
     @Override
     public Habit get(String id) { //changed to string
+        // return a habit object is deletionDate is null
+        // otherwise returns null
+
         Habit habit = null;
 
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "SELECT id, name, desc, isActive, creationDate FROM activeHabits Where id = ?";
+            String sql = "SELECT id, name, desc, creationDate, deletionDate FROM activeHabits Where id = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, id); //changed to string
@@ -52,11 +64,13 @@ public class HabitDAO implements DAO<Habit> {
                 String oid = rs.getString("id"); //changed to string
                 String name = rs.getString("name");
                 String desc = rs.getString("desc");
-                Boolean isActive = rs.getBoolean("isActive");
                 LocalDate creationDate = LocalDate.parse(rs.getString("creationDate"));
 
-                if (isActive) {
-                    habit = new Habit(oid, name, desc, true, creationDate);
+                // deletionDate might be null therefore it is stored in a String
+                String deletionDateString = rs.getString("deletionDate");
+
+                if (deletionDateString == null) {
+                    habit = new Habit(oid, name, desc, creationDate, null);
                 }
             }
 
@@ -73,7 +87,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "SELECT id, name, desc, isActive, creationDate FROM activeHabits";
+            String sql = "SELECT id, name, desc, creationDate, deletionDate FROM activeHabits";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -81,19 +95,20 @@ public class HabitDAO implements DAO<Habit> {
             String id; //changed to string
             String name;
             String desc;
-            Boolean isActive;
             LocalDate creationDate;
+            String deletionDateString;
 
             while (rs.next()) {
                 id = rs.getString("id"); //changed to string
                 name = rs.getString("name");
                 desc = rs.getString("desc");
-                isActive = rs.getBoolean("isActive");
                 creationDate = LocalDate.parse(rs.getString("creationDate"));
 
+                // deletionDate might be null therefore it is stored in a String
+                deletionDateString = rs.getString("deletionDate");
 
-                if(isActive) {
-                    Habit habit = new Habit(id, name, desc, isActive, creationDate);
+                if (deletionDateString == null) {
+                    Habit habit = new Habit(id, name, desc, creationDate, null);
                     habitsList.add(habit);
                 }
             }
@@ -102,7 +117,6 @@ public class HabitDAO implements DAO<Habit> {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-
 
         return habitsList;
     }
@@ -113,14 +127,23 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "UPDATE activeHabits SET name=?, `desc`=?, isActive=?, creationDate=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET name=?, `desc`=?, creationDate=?, deletionDate=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getName());
             ps.setString(2, habit.getDesc());
-            ps.setBoolean(3, habit.getIsActive());
-            ps.setString(4, habit.getCreationDate().toString());
+            ps.setString(3, habit.getCreationDate().toString());
             ps.setString(5, habit.getId());
+
+            // first checks if the deletionDate is a LocalDate or null
+            // then updates it accordingly
+            LocalDate deletionDate = habit.getDeletionDate();
+            if (deletionDate != null) {
+                ps.setString(4, deletionDate.toString());
+            } else {
+                ps.setNull(4, java.sql.Types.VARCHAR);
+            }
+
             result = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -135,10 +158,10 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "UPDATE activeHabits SET isActive=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET deletionDate=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setBoolean(1, false);
+            ps.setString(1, LocalDate.now().toString());
             ps.setString(2, habit.getId()); //changed to string
             result = ps.executeUpdate();
 
@@ -154,10 +177,10 @@ public class HabitDAO implements DAO<Habit> {
         int result = 0;
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "UPDATE activeHabits SET isActive=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET deletionDate=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setBoolean(1, false);
+            ps.setString(1, LocalDate.now().toString());
             ps.setString(2, id); //changed to string
             result = ps.executeUpdate();
 

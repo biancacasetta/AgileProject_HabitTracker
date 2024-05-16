@@ -35,7 +35,7 @@ class HabitRecordDAOTest {
     @Test
     void insert() {
         //Create habit
-        Habit habit = new Habit("101", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit = new Habit("101", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit);
 
         //Create habit record
@@ -52,7 +52,7 @@ class HabitRecordDAOTest {
     @Test
     void get() {
         //Create habit
-        Habit habit = new Habit("102", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit = new Habit("102", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit);
 
         //Create habit record and insert into table
@@ -69,9 +69,9 @@ class HabitRecordDAOTest {
     @Test
     void getAll() {
         //Create habits
-        Habit habit = new Habit("103", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit = new Habit("103", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit);
-        Habit habit2 = new Habit("104", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit2 = new Habit("104", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit2);
 
         //Create habit records and insert into table
@@ -94,7 +94,7 @@ class HabitRecordDAOTest {
     @Test
     void update() {
         //Create habit
-        Habit habit = new Habit("105", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit = new Habit("105", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit);
 
         //Create habit records and insert into table
@@ -113,7 +113,7 @@ class HabitRecordDAOTest {
     @Test
     void delete() {
         //Create habit
-        Habit habit = new Habit("106", "Drink water", "Drink more water", true, LocalDate.now());
+        Habit habit = new Habit("106", "Drink water", "Drink more water", LocalDate.now(), null);
         testHabits.add(habit);
 
         //Create habit records and insert into table
