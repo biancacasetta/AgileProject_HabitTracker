@@ -7,7 +7,6 @@ public class Profile {
     private String id;
     private String name;
     private String profilePicture;
-
     private String password;
 
     public Profile(String id, String name, String profilePicture, String password) {

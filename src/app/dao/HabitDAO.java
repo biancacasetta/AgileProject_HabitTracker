@@ -19,7 +19,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "INSERT INTO activeHabits (id, name, desc, creationDate, deletionDate) VALUES (?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO activeHabits (id, name, desc, creationDate, deletionDate, profileId) VALUES (?, ?, ?, ?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getId());//changed to string
@@ -35,7 +35,7 @@ public class HabitDAO implements DAO<Habit> {
             } else {
                 ps.setNull(5, java.sql.Types.VARCHAR);
             }
-
+            ps.setString(6, habit.getProfileId());
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -87,7 +87,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "SELECT id, name, desc, creationDate, deletionDate FROM activeHabits";
+            String sql = "SELECT id, name, desc, creationDate, deletionDate, profileId FROM activeHabits";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -97,6 +97,7 @@ public class HabitDAO implements DAO<Habit> {
             String desc;
             LocalDate creationDate;
             String deletionDateString;
+            String profileId;
 
             while (rs.next()) {
                 id = rs.getString("id"); //changed to string
@@ -106,9 +107,11 @@ public class HabitDAO implements DAO<Habit> {
 
                 // deletionDate might be null therefore it is stored in a String
                 deletionDateString = rs.getString("deletionDate");
+                profileId = rs.getString("profileId");
 
                 if (deletionDateString == null) {
                     Habit habit = new Habit(id, name, desc, creationDate, null);
+                    habit.setProfileId(profileId);
                     habitsList.add(habit);
                 }
             }
