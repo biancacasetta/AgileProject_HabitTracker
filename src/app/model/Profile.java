@@ -7,11 +7,13 @@ public class Profile {
     private String id;
     private String name;
     private String profilePicture;
+    private String password;
 
-    public Profile(String id, String name, String profilePicture) {
+    public Profile(String id, String name, String profilePicture, String password) {
         this.id = id;
         this.name = name;
         this.profilePicture = profilePicture;
+        this.password = password;
     }
 
     public String getId() {
@@ -37,4 +39,8 @@ public class Profile {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 }

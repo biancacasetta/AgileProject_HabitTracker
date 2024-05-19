@@ -20,12 +20,13 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "INSERT INTO profile (id, name, photo) VALUES (?, ?, ?);";
+            String sql = "INSERT INTO profile (id, name, photo, password) VALUES (?, ?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, profile.getId());
             ps.setString(2, profile.getName());
             ps.setString(3, profile.getProfilePicture());
+            ps.setString(4, profile.getPassword());
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -41,7 +42,7 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "SELECT id, name, photo FROM profile Where id = ?";
+            String sql = "SELECT id, name, photo, password FROM profile Where id = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, id);
@@ -51,8 +52,9 @@ public class ProfileDAO implements DAO<Profile> {
                 String oid = rs.getString("id");
                 String name = rs.getString("name");
                 String photo = rs.getString("photo");
+                String password = rs.getString("password");
 
-                profile = new Profile(oid, name, photo);
+                profile = new Profile(oid, name, photo, password);
             }
 
         } catch (SQLException | IOException e) {
@@ -63,12 +65,12 @@ public class ProfileDAO implements DAO<Profile> {
     }
 
     @Override
-    public List<Profile> getAll() {
+    public List<Profile> getAllNotDeleted() {
         List<Profile> profilesList = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "SELECT id, name, photo FROM profile";
+            String sql = "SELECT id, name, photo, password FROM profile";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -76,13 +78,15 @@ public class ProfileDAO implements DAO<Profile> {
             String id;
             String name;
             String photo;
+            String password;
 
             while (rs.next()) {
                 id = rs.getString("id");
                 name = rs.getString("name");
                 photo = rs.getString("photo");
+                password = rs.getString("password");
 
-                Profile profile = new Profile(id, name, photo);
+                Profile profile = new Profile(id, name, photo, password);
                 profilesList.add(profile);
             }
 

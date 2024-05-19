@@ -19,7 +19,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "INSERT INTO activeHabits (id, name, desc, creationDate, deletionDate) VALUES (?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO activeHabits (id, name, desc, creationDate, deletionDate, profileId) VALUES (?, ?, ?, ?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getId());//changed to string
@@ -35,7 +35,7 @@ public class HabitDAO implements DAO<Habit> {
             } else {
                 ps.setNull(5, java.sql.Types.VARCHAR);
             }
-
+            ps.setString(6, habit.getProfileId());
             rs = ps.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -82,12 +82,14 @@ public class HabitDAO implements DAO<Habit> {
     }
 
     @Override
-    public List<Habit> getAll() {
+    public List<Habit> getAllNotDeleted() {
+        // returns a list only with habits that have no deletionDate (a null deltionDate)
+
         List<Habit> habitsList = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "SELECT id, name, desc, creationDate, deletionDate FROM activeHabits";
+            String sql = "SELECT id, name, desc, creationDate, deletionDate, profileId FROM activeHabits";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -97,6 +99,7 @@ public class HabitDAO implements DAO<Habit> {
             String desc;
             LocalDate creationDate;
             String deletionDateString;
+            String profileId;
 
             while (rs.next()) {
                 id = rs.getString("id"); //changed to string
@@ -106,11 +109,62 @@ public class HabitDAO implements DAO<Habit> {
 
                 // deletionDate might be null therefore it is stored in a String
                 deletionDateString = rs.getString("deletionDate");
+                profileId = rs.getString("profileId");
 
                 if (deletionDateString == null) {
                     Habit habit = new Habit(id, name, desc, creationDate, null);
+                    habit.setProfileId(profileId);
                     habitsList.add(habit);
                 }
+            }
+
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return habitsList;
+    }
+
+
+    public List<Habit> getAll() {
+        // returns a list with all habits regardless if they have a deletionDate or not
+
+        List<Habit> habitsList = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT id, name, desc, creationDate, deletionDate, profileId FROM activeHabits";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            String id; //changed to string
+            String name;
+            String desc;
+            LocalDate creationDate;
+            String deletionDateString;
+            String profileId;
+
+            while (rs.next()) {
+                id = rs.getString("id"); //changed to string
+                name = rs.getString("name");
+                desc = rs.getString("desc");
+                creationDate = LocalDate.parse(rs.getString("creationDate"));
+
+                // deletionDate might be null therefore it is stored in a String
+                deletionDateString = rs.getString("deletionDate");
+                profileId = rs.getString("profileId");
+
+                // this will take all habits
+                Habit habit;
+                if (deletionDateString == null) {
+                    habit = new Habit(id, name, desc, creationDate, null);
+                } else {
+                    habit = new Habit(id, name, desc, creationDate, LocalDate.parse(deletionDateString));
+                }
+                habit.setProfileId(profileId);
+                habitsList.add(habit);
             }
 
 

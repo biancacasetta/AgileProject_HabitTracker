@@ -1,10 +1,7 @@
 package app.gui;
 
 import app.dao.ProfileDAO;
-import app.model.Habit;
-import app.model.HabitService;
-import app.model.HabitRecord;
-import app.model.Profile;
+import app.model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +34,10 @@ public class Dashboard extends JFrame implements ActionListener {
     private JButton statsButton;
     private JButton newHabitButton;
     private JButton profileButton;
+    private JPanel userAccountManagement;
+    private JButton loginButton;
+    private JButton createAccountButton;
+    private JButton logoutButton;
 
     //instantiate other necessary classes
     private HabitService habitService;
@@ -47,14 +48,18 @@ public class Dashboard extends JFrame implements ActionListener {
 
     private HabitRecord habitRecord;
 
+    private LoginService loginService;
+
+
     //getter and setter for
 
     //constructor
     public Dashboard() {
         //initialise class instances
         this.habitService = new HabitService();
+        this.loginService = new LoginService();
         this.profileDAO = new ProfileDAO();
-        this.profile = profileDAO.get("1");
+        this.profile = profileDAO.get(loginService.getProfileIdFromCurrentUserLoggedIn());
         this.currentDate = LocalDate.now();
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
@@ -84,18 +89,35 @@ public class Dashboard extends JFrame implements ActionListener {
         this.userProfile = new JPanel(new BorderLayout());
         this.userProfile.setMaximumSize(new Dimension(400, 50));
 
+        //User Account Management
+        this.userAccountManagement = new JPanel();
+        userAccountManagement.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 200));
+
+        this.loginButton = new JButton("Login");
+        this.loginButton.setFocusable(false);
+        this.loginButton.addActionListener(this);
+
+        this.logoutButton = new JButton("Logout");
+        this.logoutButton.setFocusable(false);
+        this.logoutButton.addActionListener(this);
+
+        this.createAccountButton = new JButton("Create Account");
+        this.createAccountButton.setFocusable(false);
+        this.createAccountButton.addActionListener(this);
+
         //Profile Picture
         this.profilePicture = new JLabel();
         this.profilePicture.setPreferredSize(new Dimension(30,30));
-        ImageIcon profileIcon = new ImageIcon(this.profile.getProfilePicture());
-        Image profilePic = profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon scaledProfileIcon = new ImageIcon(profilePic);
-        this.profilePicture.setIcon(scaledProfileIcon);
-
+        if(this.profile != null) {
+            ImageIcon profileIcon = new ImageIcon(this.profile.getProfilePicture());
+            Image profilePic = profileIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            ImageIcon scaledProfileIcon = new ImageIcon(profilePic);
+            this.profilePicture.setIcon(scaledProfileIcon);
+        }
         this.profilePicture.setBackground(Color.GREEN);
 
         //Greeting
-        this.greeting = new JLabel(String.format("Hello, %s!", this.profile.getName()));
+        this.greeting = new JLabel(String.format("Hello, %s!", this.profile != null ? this.profile.getName() : ""));
         this.greeting.setFont(new Font("Arial", Font.BOLD, 20));
         this.greeting.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
 
@@ -154,36 +176,46 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     public void displayGUI() {
+        var loggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
         SwingUtilities.invokeLater(() -> {
-            //User Profile
-            this.userProfile.add(this.profilePicture, BorderLayout.WEST);
-            this.userProfile.add(this.greeting, BorderLayout.CENTER);
-            getContentPane().add(this.userProfile);
 
-            //Header
-            this.dateHeader.add(previousDay, BorderLayout.WEST);
-            this.dateHeader.add(today, BorderLayout.CENTER);
-            this.dateHeader.add(nextDay, BorderLayout.EAST);
-            getContentPane().add(this.dateHeader);
+            if (loggedIn == null) {
 
-            //Habits Container
-            habitsContainer.removeAll();
-            addHabitList(habitService.getAllHabitsFromDB(), this.currentDate);//getting habits from DB
-            updateProgressBar();
-            getContentPane().add(scrollPane);
+                //User Account Management
+                this.userAccountManagement.add(loginButton);
+                this.userAccountManagement.add(createAccountButton);
+                getContentPane().add(userAccountManagement);
 
-            this.setVisible(true);
+            } else {
 
-            //Footer
-            this.tabFooter.add(statsButton);
-            this.tabFooter.add(newHabitButton);
-            this.tabFooter.add(profileButton);
-            getContentPane().add(this.tabFooter);
+                //User Profile
+                this.userProfile.add(this.profilePicture, BorderLayout.WEST);
+                this.userProfile.add(this.greeting, BorderLayout.CENTER);
+                this.userProfile.add(this.logoutButton, BorderLayout.EAST);
+                getContentPane().add(this.userProfile);
 
-            //Progress bar
-            getContentPane().add(progress);
-            getContentPane().add(progressLabel);
+                //Header
+                this.dateHeader.add(previousDay, BorderLayout.WEST);
+                this.dateHeader.add(today, BorderLayout.CENTER);
+                this.dateHeader.add(nextDay, BorderLayout.EAST);
+                getContentPane().add(this.dateHeader);
 
+                //Habits Container
+                habitsContainer.removeAll();
+                addHabitList(habitService.getAllHabitsFromDB(), this.currentDate);//getting habits from DB
+                updateProgressBar();
+                getContentPane().add(scrollPane);
+
+                //Footer
+                this.tabFooter.add(statsButton);
+                this.tabFooter.add(newHabitButton);
+                this.tabFooter.add(profileButton);
+                getContentPane().add(this.tabFooter);
+
+                //Progress bar
+                getContentPane().add(progress);
+                getContentPane().add(progressLabel);
+            }
             this.setVisible(true);
         });
     }
@@ -262,6 +294,7 @@ public class Dashboard extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(() -> {
             //Remove all components from the content pane
             getContentPane().removeAll();
+            this.profile = profileDAO.get(loginService.getProfileIdFromCurrentUserLoggedIn());
             //Recreate UI components
             createUIComponents();
             //Display the updated GUI
@@ -311,8 +344,14 @@ public class Dashboard extends JFrame implements ActionListener {
             this.refreshUI();
         } else if (e.getSource() == this.statsButton) {
             StatisticsPopUp statisticsPopUp = new StatisticsPopUp(this.habitService);
+        } else if (e.getSource() == this.loginButton) {
+            LoginPopUp loginPopUp = new LoginPopUp(this);
+        } else if (e.getSource() == this.createAccountButton) {
+            CreateUserPopUp createUserPopUp = new CreateUserPopUp(this);
+        } else if (e.getSource() == this.logoutButton) {
+            var currentUserProfileId = loginService.getProfileIdFromCurrentUserLoggedIn();
+            loginService.logout(currentUserProfileId);
+            this.refreshUI();
         }
     }
-
-
 }

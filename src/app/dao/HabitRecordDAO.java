@@ -63,7 +63,7 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
     }
 
     @Override
-    public List<HabitRecord> getAll() {
+    public List<HabitRecord> getAllNotDeleted() {
         List<HabitRecord> habitRecordsList = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()){

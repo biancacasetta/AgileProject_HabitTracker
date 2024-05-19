@@ -11,6 +11,7 @@ public class Habit {
     //private LocalDate deletionDate;
 
     private LocalDate deletionDate;
+    private String profileId;
 
     public String getName() {
         return name;
@@ -81,5 +82,8 @@ public class Habit {
         this.deletionDate = deletionDate;
     }
 
+    public String getProfileId() { return profileId; }
+
+    public void setProfileId(String profileId) { this.profileId = profileId; }
 }
 

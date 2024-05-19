@@ -2,7 +2,6 @@ package app.model;
 
 import app.dao.HabitDAO;
 import app.dao.HabitRecordDAO;
-import app.model.Habit;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -13,10 +12,12 @@ public class HabitService {
 
     private HabitDAO habitDAO;
     private HabitRecordDAO habitRecordDAO;
+    private LoginService loginService;
 
     public HabitService() {
         this.habitDAO = new HabitDAO();
         this.habitRecordDAO = new HabitRecordDAO();
+        this.loginService = new LoginService();
     }
     ArrayList<Habit> listOfHabits = new ArrayList<>();
 
@@ -52,6 +53,8 @@ public class HabitService {
 
     //Add habit to DB
     public void addHabitToDB(Habit newHabit) {
+        var currentUserLoggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
+        newHabit.setProfileId(currentUserLoggedIn);
         habitDAO.insert(newHabit);
     }
     public void editHabitInDB(Habit editHabit) {habitDAO.update(editHabit);}
@@ -63,7 +66,12 @@ public class HabitService {
 
     //Get all habits from DB
     public List<Habit> getAllHabitsFromDB() {
-        return habitDAO.getAll();
+        var currentUserLoggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
+        var allHabits = habitDAO.getAllNotDeleted();
+        if(currentUserLoggedIn != null) {
+            allHabits.removeIf(habit -> !currentUserLoggedIn.equals(habit.getProfileId()));
+        }
+        return allHabits;
     }
 
     //Delete habit from DB
@@ -86,7 +94,7 @@ public class HabitService {
     }
 
     public List<HabitRecord> getAllHabitRecordsFromDB() {
-        return habitRecordDAO.getAll();
+        return habitRecordDAO.getAllNotDeleted();
     }
 
     public void updateHabitInDB(Habit habit) {
