@@ -10,12 +10,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 public class Dashboard extends JFrame implements ActionListener {
     //UI components
@@ -192,24 +194,26 @@ public class Dashboard extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    //Method that adds list of habits from the DB and associated completion status to the dashboard
+    // Method that adds list of habits from the DB and associated completion status to the dashboard
     public void addHabitList(List<Habit> habits, LocalDate selectedDate) {
         List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
-            // Check if the habit's creationDate is before or equal to the selectedDate
-            if (habit.getCreationDate().compareTo(selectedDate) <= 0) {
-                // Find the associated habit record
-                HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
-                // Create a new HabitCard with the habit and its associated habit record
-                HabitCard hc = new HabitCard(habit, habitRecord, this);
-                // Update checkbox status based on completion status from database
-                hc.adjustCompletion(habitRecord);
-                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-                this.habitsContainer.add(hc.innerPanel);
-                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+            // Check if the habit was created before the selected date and not deleted before the selected date
+            if (habit.getCreationDate().compareTo(selectedDate) <= 0 &&
+                    (habit.getDeletionDate() == null || habit.getDeletionDate().compareTo(selectedDate) > 0))  {
+                    // Find the associated habit record
+                    HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
+                    // Create a new HabitCard with the habit and its associated habit record
+                    HabitCard hc = new HabitCard(habit, habitRecord, this);
+                    // Update checkbox status based on completion status from database
+                    hc.adjustCompletion(habitRecord);
+                    habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+                    this.habitsContainer.add(hc.innerPanel);
+                    habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
             }
-        }
+            }
     }
+
 
     // Method that looks for habit record based on association with a habit and selected date
     private HabitRecord findHabitRecordForHabit(Habit habit, LocalDate selectedDate, List<HabitRecord> habitRecords) {
@@ -269,7 +273,7 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     // Method to update the habit list based on the selected date
-    private void updateHabitList(LocalDate selectedDate) {
+    public void updateHabitList(LocalDate selectedDate) {
         // Remove all components from habitsContainer
         habitsContainer.removeAll();
         // Add habit list based on the current date

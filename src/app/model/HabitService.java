@@ -88,4 +88,8 @@ public class HabitService {
     public List<HabitRecord> getAllHabitRecordsFromDB() {
         return habitRecordDAO.getAll();
     }
+
+    public void updateHabitInDB(Habit habit) {
+        habitDAO.update(habit);
+    }
 }

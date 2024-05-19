@@ -153,6 +153,7 @@ public class HabitDAO implements DAO<Habit> {
         return result;
     }
 
+
     @Override
     public int delete(Habit habit) {
         int result = 0;
@@ -191,6 +192,8 @@ public class HabitDAO implements DAO<Habit> {
 
         return result;
     }
+
+
 
     public int clearFromTable(Habit habit) {
         int result = 0;
