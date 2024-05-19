@@ -65,7 +65,7 @@ public class ProfileDAO implements DAO<Profile> {
     }
 
     @Override
-    public List<Profile> getAll() {
+    public List<Profile> getAllNotDeleted() {
         List<Profile> profilesList = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {

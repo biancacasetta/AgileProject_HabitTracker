@@ -45,7 +45,7 @@ public class SessionDAO implements DAO<Session> {
     }
 
     @Override
-    public List<Session> getAll() {
+    public List<Session> getAllNotDeleted() {
         List<Session> sessions = new ArrayList<>();
         try (Connection con = DBConnection.getConnection()) {
             String sql = "SELECT profileId FROM session";

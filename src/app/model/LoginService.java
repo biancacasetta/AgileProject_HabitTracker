@@ -13,7 +13,7 @@ public class LoginService {
     }
 
     public String getProfileIdFromCurrentUserLoggedIn() {
-        var activeSessions = sessionDAO.getAll();
+        var activeSessions = sessionDAO.getAllNotDeleted();
         if(!activeSessions.isEmpty()) {
             return activeSessions.get(0).getProfileId();
         }

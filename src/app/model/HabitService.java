@@ -2,7 +2,6 @@ package app.model;
 
 import app.dao.HabitDAO;
 import app.dao.HabitRecordDAO;
-import app.model.Habit;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -68,7 +67,7 @@ public class HabitService {
     //Get all habits from DB
     public List<Habit> getAllHabitsFromDB() {
         var currentUserLoggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
-        var allHabits = habitDAO.getAll();
+        var allHabits = habitDAO.getAllNotDeleted();
         if(currentUserLoggedIn != null) {
             allHabits.removeIf(habit -> !currentUserLoggedIn.equals(habit.getProfileId()));
         }
@@ -95,6 +94,6 @@ public class HabitService {
     }
 
     public List<HabitRecord> getAllHabitRecordsFromDB() {
-        return habitRecordDAO.getAll();
+        return habitRecordDAO.getAllNotDeleted();
     }
 }

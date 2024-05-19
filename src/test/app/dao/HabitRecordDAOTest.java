@@ -83,7 +83,7 @@ class HabitRecordDAOTest {
         hrDAO.insert(habitRecord2);
 
         //Fetching all records
-        List<HabitRecord> res = hrDAO.getAll();
+        List<HabitRecord> res = hrDAO.getAllNotDeleted();
 
         assertNotNull(res);
         assertFalse(res.isEmpty());

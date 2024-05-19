@@ -60,7 +60,7 @@ class HabitDAOTest {
         hDAO.insert(h1);
         hDAO.insert(h2);
 
-        List<Habit> res = hDAO.getAll();
+        List<Habit> res = hDAO.getAllNotDeleted();
 
         //Check if list is not empty, and if it has 2 or more objects in it
         assertNotNull(res);

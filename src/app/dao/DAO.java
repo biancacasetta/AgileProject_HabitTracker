@@ -8,7 +8,7 @@ public interface DAO<T> {
 
     T get(String id);
 
-    List<T> getAll();
+    List<T> getAllNotDeleted();
 
     int update(T t);
 

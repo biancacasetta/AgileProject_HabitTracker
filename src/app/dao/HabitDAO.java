@@ -82,7 +82,9 @@ public class HabitDAO implements DAO<Habit> {
     }
 
     @Override
-    public List<Habit> getAll() {
+    public List<Habit> getAllNotDeleted() {
+        // returns a list only with habits that have no deletionDate (a null deltionDate)
+
         List<Habit> habitsList = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {
@@ -125,7 +127,9 @@ public class HabitDAO implements DAO<Habit> {
     }
 
 
-    public List<Habit> getAllDeleted() {
+    public List<Habit> getAll() {
+        // returns a list with all habits regardless if they have a deletionDate or not
+
         List<Habit> habitsList = new ArrayList<>();
 
         try (Connection con = DBConnection.getConnection()) {

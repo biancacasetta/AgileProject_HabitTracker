@@ -37,7 +37,7 @@ public class Demo {
 //                habitDAO.update(habitToInsert);
 //                habitDAO.delete(habitToInsert);
 
-                List<Habit> habitsList = habitDAO.getAllDeleted();
+                List<Habit> habitsList = habitDAO.getAll();
                 habitsList.forEach(x -> System.out.println(x));
 
 //                habitRecordDAO.insert(habitRecord);
