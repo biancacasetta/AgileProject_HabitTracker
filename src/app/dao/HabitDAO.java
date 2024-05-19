@@ -124,6 +124,53 @@ public class HabitDAO implements DAO<Habit> {
         return habitsList;
     }
 
+
+    public List<Habit> getAllDeleted() {
+        List<Habit> habitsList = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT id, name, desc, creationDate, deletionDate, profileId FROM activeHabits";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            String id; //changed to string
+            String name;
+            String desc;
+            LocalDate creationDate;
+            String deletionDateString;
+            String profileId;
+
+            while (rs.next()) {
+                id = rs.getString("id"); //changed to string
+                name = rs.getString("name");
+                desc = rs.getString("desc");
+                creationDate = LocalDate.parse(rs.getString("creationDate"));
+
+                // deletionDate might be null therefore it is stored in a String
+                deletionDateString = rs.getString("deletionDate");
+                profileId = rs.getString("profileId");
+
+                // this will take all habits
+                Habit habit;
+                if (deletionDateString == null) {
+                    habit = new Habit(id, name, desc, creationDate, null);
+                } else {
+                    habit = new Habit(id, name, desc, creationDate, LocalDate.parse(deletionDateString));
+                }
+                habit.setProfileId(profileId);
+                habitsList.add(habit);
+            }
+
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return habitsList;
+    }
+
     @Override
     public int update(Habit habit) {
         int result = 0;
