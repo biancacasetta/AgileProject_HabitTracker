@@ -202,7 +202,7 @@ public class Dashboard extends JFrame implements ActionListener {
 
                 //Habits Container
                 habitsContainer.removeAll();
-                addHabitList(habitService.getAllHabitsFromDB(), this.currentDate);//getting habits from DB
+                addHabitList(this.currentDate);//getting habits from DB
                 updateProgressBar();
                 getContentPane().add(scrollPane);
 
@@ -227,22 +227,19 @@ public class Dashboard extends JFrame implements ActionListener {
     }
 
     // Method that adds list of habits from the DB and associated completion status to the dashboard
-    public void addHabitList(List<Habit> habits, LocalDate selectedDate) {
+    public void addHabitList(LocalDate selectedDate) {
+        List<Habit> habits = habitService.getFilteredHabitsFromDB(selectedDate); // Get filtered habits from DB
         List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
-            // Check if the habit was created before the selected date and not deleted before the selected date
-            if (habit.getCreationDate().compareTo(selectedDate) <= 0 &&
-                    (habit.getDeletionDate() == null || habit.getDeletionDate().compareTo(selectedDate) > 0))  {
-                    // Find the associated habit record
-                    HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
-                    // Create a new HabitCard with the habit and its associated habit record
-                    HabitCard hc = new HabitCard(habit, habitRecord, this);
-                    // Update checkbox status based on completion status from database
-                    hc.adjustCompletion(habitRecord);
-                    habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-                    this.habitsContainer.add(hc.innerPanel);
-                    habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-            }
+            // Find the associated habit record
+            HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
+            // Create a new HabitCard with the habit and its associated habit record
+            HabitCard hc = new HabitCard(habit, habitRecord, this);
+            // Update checkbox status based on completion status from database
+            hc.adjustCompletion(habitRecord);
+            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+            this.habitsContainer.add(hc.innerPanel);
+            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
             }
     }
 
@@ -257,14 +254,13 @@ public class Dashboard extends JFrame implements ActionListener {
         return null; // Return null if no associated habit record is found
     }
 
-
     private String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.ENGLISH);
         return date.format(formatter);
     }
 
     public int calculateCompletionPercentage() {
-        int totalHabits = this.habitService.getAllHabitsFromDB().size(); //getting habits from DB
+        int totalHabits = this.habitService.getFilteredHabitsFromDB(getCurrentDate()).size(); //getting habits from DB based on creation and deletion date
         ArrayList<JCheckBox> checkBoxList = new ArrayList<>();
         if(this.habitsContainer != null) {
             for (Component component : this.habitsContainer.getComponents()) {
@@ -310,7 +306,7 @@ public class Dashboard extends JFrame implements ActionListener {
         // Remove all components from habitsContainer
         habitsContainer.removeAll();
         // Add habit list based on the current date
-        addHabitList(habitService.getAllHabitsFromDB(), selectedDate);
+        addHabitList(selectedDate);
         // Update progress bar
         updateProgressBar();
         // Repaint the GUI

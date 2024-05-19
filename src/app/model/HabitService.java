@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import java.util.List;
+import java.time.LocalDate;
 
 public class HabitService {
 
@@ -66,6 +67,33 @@ public class HabitService {
 
     //Get all habits from DB
     public List<Habit> getAllHabitsFromDB() {
+        var currentUserLoggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
+        var allHabits = habitDAO.getAll();
+        if(currentUserLoggedIn != null) {
+            allHabits.removeIf(habit -> !currentUserLoggedIn.equals(habit.getProfileId()));
+        }
+        return allHabits;
+    }
+
+    // Filters through all habits in DB based on creation and deletion date, returns those that pass condition
+    public List<Habit> getFilteredHabitsFromDB(LocalDate selectedDate) {
+        var currentUserLoggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
+        var allHabits = habitDAO.getAll();
+        if(currentUserLoggedIn != null) {
+            allHabits.removeIf(habit -> !currentUserLoggedIn.equals(habit.getProfileId()));
+        }
+
+        // Filter habits based on creation and deletion dates
+        allHabits.removeIf(habit ->
+                habit.getCreationDate().compareTo(selectedDate) > 0 ||
+                        (habit.getDeletionDate() != null && habit.getDeletionDate().compareTo(selectedDate) <= 0)
+        );
+
+        return allHabits;
+    }
+
+
+    public List<Habit> getAllNotDeletedHabitsFromDB() {
         var currentUserLoggedIn = loginService.getProfileIdFromCurrentUserLoggedIn();
         var allHabits = habitDAO.getAllNotDeleted();
         if(currentUserLoggedIn != null) {
