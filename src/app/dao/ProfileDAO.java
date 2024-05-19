@@ -42,7 +42,7 @@ public class ProfileDAO implements DAO<Profile> {
 
         try (Connection con = DBConnection.getConnection()){
 
-            String sql = "SELECT id, name, photo FROM profile Where id = ?";
+            String sql = "SELECT id, name, photo, password FROM profile Where id = ?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, id);
