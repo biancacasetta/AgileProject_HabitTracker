@@ -8,6 +8,8 @@ public class Habit {
     private String name;
     private String desc;
     private LocalDate creationDate;
+    //private LocalDate deletionDate;
+
     private LocalDate deletionDate;
     private String profileId;
 
@@ -47,7 +49,8 @@ public class Habit {
         return deletionDate;
     }
 
-    public void setDeletionDate(LocalDate deletionDate) {
+
+   public void setDeletionDate(LocalDate deletionDate) {
         this.deletionDate = deletionDate;
     }
 

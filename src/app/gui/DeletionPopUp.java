@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 public class DeletionPopUp extends JDialog implements ActionListener {
 
@@ -85,8 +86,9 @@ public class DeletionPopUp extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == deleteButton) {
             //Delete habit from the DB
-            habitService.deleteHabitFromDB(this.habit.getId());
+            habitService.updateHabitInDB(this.habit);
             System.out.println("Habit removed from DB");
+            dashboard.updateHabitList(dashboard.getCurrentDate());
             deleted = true;
             dispose();
         } else if (e.getSource() == cancelButton) {
