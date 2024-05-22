@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.DBConnection;
+import app.model.Habit;
 import app.model.HabitRecord;
 
 import java.io.IOException;
@@ -88,6 +89,35 @@ public class HabitRecordDAO implements DAO<HabitRecord> {
         }
 
         return habitRecordsList;
+    }
+
+    public int getCompletionQuantity(Habit habit) {
+        List<HabitRecord> habitRecordsList = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()){
+
+            String sql = "SELECT * FROM recordHabits WHERE habitId = ?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, habit.getId());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String recordId = rs.getString("recordId");//changed to string
+                String habitId = rs.getString("habitId");//changed to string
+                LocalDate completionDate = LocalDate.parse(rs.getString("completionDate")); //change to LocalDate
+
+                HabitRecord habitRecord = new HabitRecord(recordId, habitId, completionDate);
+                habitRecordsList.add(habitRecord);
+
+            }
+
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return habitRecordsList.size();
     }
 
     @Override

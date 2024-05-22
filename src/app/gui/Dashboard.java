@@ -61,6 +61,7 @@ public class Dashboard extends JFrame implements ActionListener {
         this.profileDAO = new ProfileDAO();
         this.profile = profileDAO.get(loginService.getProfileIdFromCurrentUserLoggedIn());
         this.currentDate = LocalDate.now();
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("./icons/logo.png"));
         this.setTitle("Habits Dashboard");
         this.setSize(500, 500);
         this.setResizable(false);
@@ -231,16 +232,20 @@ public class Dashboard extends JFrame implements ActionListener {
         List<Habit> habits = habitService.getFilteredHabitsFromDB(selectedDate); // Get filtered habits from DB
         List<HabitRecord> habitRecords = habitService.getAllHabitRecordsFromDB(); // Fetch all habit records
         for (Habit habit : habits) {
-            // Find the associated habit record
-            HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
-            // Create a new HabitCard with the habit and its associated habit record
-            HabitCard hc = new HabitCard(habit, habitRecord, this);
-            // Update checkbox status based on completion status from database
-            hc.adjustCompletion(habitRecord);
-            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
-            this.habitsContainer.add(hc.innerPanel);
-            habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+            // Check if the habit was created before the selected date and not deleted before the selected date
+            if (habit.getCreationDate().compareTo(selectedDate) <= 0 &&
+                    (habit.getDeletionDate() == null || habit.getDeletionDate().compareTo(selectedDate) > 0)) {
+                // Find the associated habit record
+                HabitRecord habitRecord = findHabitRecordForHabit(habit, selectedDate, habitRecords);
+                // Create a new HabitCard with the habit and its associated habit record
+                HabitCard hc = new HabitCard(habit, habitRecord, this);
+                // Update checkbox status based on completion status from database
+                hc.adjustCompletion(habitRecord);
+                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+                this.habitsContainer.add(hc.innerPanel);
+                habitsContainer.add(Box.createRigidArea(new Dimension(0, 5)));
             }
+        }
     }
 
 

@@ -10,11 +10,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsPopUp extends JDialog implements ActionListener {
 
     private HabitService hs;
+    private JScrollPane scrollPane;
+    private JPanel body;
     public StatisticsPopUp(HabitService hs) {
         this.hs = hs;
 
@@ -31,14 +34,24 @@ public class StatisticsPopUp extends JDialog implements ActionListener {
     }
 
     private void styleUIComponents() {
-        //HabitStatsCard
-        for(Habit habit: this.hs.getListOfHabits()) { //not working. have to retrieve from DB.
-            HabitStatsCard statsCard = new HabitStatsCard(habit);
-            getContentPane().add(statsCard.innerPanel);
-        }
+        //Body
+        this.body = new JPanel();
+        this.body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
+
+        //Scroll Pane
+        scrollPane = new JScrollPane(body);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(400, 375));
     }
 
     private void displayGUI() {
+
+        //HabitStatsCard
+        for(Habit habit: this.hs.getAllHabitsFromDB()) {
+            HabitStatsCard statsCard = new HabitStatsCard(habit);
+            this.body.add(statsCard.innerPanel);
+        }
+        getContentPane().add(scrollPane);
 
         this.setVisible(true);
     }
