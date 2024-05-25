@@ -24,7 +24,8 @@ class HabitServiceTest {
 
       // leaving one habit in the list for the sake of testing
 
-      Habit res = habitServiceClass.getListOfHabits().getLast();
+      var habits = habitServiceClass.getListOfHabits();
+      Habit res = habitServiceClass.getListOfHabits().get(habits.size() - 1);
 
       Habit exp = new Habit("3", "Meditate", "meditate for 10 minutes", LocalDate.now(), null);
 
