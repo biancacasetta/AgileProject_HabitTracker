@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Habit Tracker</title>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+    />
+</head>
+<body class="bg-light"
+      style="background-image: url('https://images.pexels.com/photos/207529/pexels-photo-207529.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; width: 100%;">
+<div class="container" style="max-width: 700px; margin: auto; margin-top: 100px; background-color: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 20px;">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="d-flex align-items-center">
+            <img th:src="@{${profilePictureUrl}}" alt="Profile Picture" class="rounded-circle"
+                 style="width: 40px; height: 40px; margin-right: 10px;">
+            <form method="post" th:action="@{/profile}">
+                <button type="submit" class="btn btn-info">Profile</button>
+            </form>
+        </div>
+        <form method="post" th:action="@{/logout}">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+    <div class="d-flex justify-content-center mt-5">
+        <img src="logo.png" alt="Logo" style="width: 200px; height: 200px; margin-bottom: 10px;">
+    </div>
+    <h1 class="text-center mt-5">Welcome, <span th:text="${username}" class="text-primary"></span> ! </h1>
+
+    <ul class="list-unstyled d-flex justify-content-center pt-4">
+        <li>
+            <a class="btn btn-primary text-white mb-2 me-2" th:href="@{/habits}"
+            >Display all habits</a>
+        </li>
+        <li>
+            <a class="btn btn-secondary text-white mb-2" th:href="@{/habits/new}"
+            >Create a new habit</a>
+        </li>
+    </ul>
+    <hr/>
+    <div class="row">
+        <div class="col">
+            <h3 class="text-center mt-2">Show the records</h3>
+            <div class="text-center">
+                <form method="get" th:action="@{/records}">
+                    <div class="mb-3">
+                        <label for="date-search" class="form-label">Choose a date:</label><br/>
+                        <div class="text-center"> <!-- Center the input element -->
+                            <input type="date" id="date-search" name="from" class="form-control mx-auto" style="width: auto;" value="" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+                        </div>
+
+                    </div>
+                    <!--The name of this input is mapped in the controller -->
+                    <button type="submit" class="btn btn-primary">Find records</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col">
+            <h3 class="text-center mt-2">Display the statistics</h3>
+            <div class="text-center">
+                <form method="get" th:action="@{/records/stats}">
+                    <div class="mb-3">
+                        <label for="date-stats" class="form-label">Choose a date:</label><br/>
+                        <div class="text-center"> <!-- Center the input element -->
+                            <input type="date" id="date-stats" name="from" class="form-control mx-auto" style="width: auto;" value="" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+                        </div>
+                    </div>
+                    <!--The name of this input is mapped in the controller -->
+                    <button type="submit" class="btn btn-primary">Display stats</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

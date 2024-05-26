@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Update Profile</title>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+    />
+</head>
+<body class="bg-light"
+      style="background-image: url('https://images.pexels.com/photos/207529/pexels-photo-207529.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; width: 100%;">
+<div class="container"
+     style="max-width: 700px; margin: auto; margin-top: 100px; background-color: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 20px;">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="d-flex align-items-center">
+            <img th:src="@{${profilePictureUrl}}" alt="Profile Picture" class="rounded-circle"
+                 style="width: 40px; height: 40px; margin-right: 10px;">
+            <form method="post" th:action="@{/profile}">
+                <button type="submit" class="btn btn-info">Profile</button>
+            </form>
+        </div>
+        <form method="post" th:action="@{/logout}">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+    <div class="d-flex justify-content-center mt-5">
+        <img src="logo.png" alt="Logo" style="width: 200px; height: 200px; margin-bottom: 10px;">
+    </div>
+    <h1>Update Profile</h1>
+    <!-- Error Div for Displaying Validation Errors -->
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Form for Updating Profile Picture URL -->
+    <form method="post" th:action="@{/updateProfilePictureUrl}">
+        <div class="mb-3">
+            <label for="profilePictureUrl" class="form-label">Profile Picture URL:</label>
+            <input type="url" id="profilePictureUrl" name="profilePictureUrl" class="form-control" required/>
+        </div>
+        <div class="d-flex justify-content-center mt-5">
+            <button type="submit" class="btn btn-primary">Update Profile Picture</button>
+        </div>
+    </form>
+
+    <hr/>
+
+    <!-- Form for Updating Password -->
+    <form method="post" th:action="@{/updatePassword}">
+        <div class="mb-3">
+            <label for="currentPassword" class="form-label">Current Password:</label>
+            <input type="password" id="currentPassword" name="currentPassword" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="confirmNewPassword" class="form-label">Confirm New Password:</label>
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-control" required/>
+        </div>
+        <div class="d-flex justify-content-center mt-5">
+
+            <button type="submit" class="btn btn-primary">Update Password</button>
+        </div>
+    </form>
+    <div class="d-flex justify-content-center mt-5">
+        <a href="/" class="btn btn-success">Go back</a>
+    </div>
+</div>
+</body>
+</html>
