@@ -44,7 +44,7 @@ public class HabitCreation extends JDialog implements ActionListener {
         cancelButton = new JButton("CANCEL");
 
         this.setTitle("Add Habit");
-        this.setSize(400, 400);
+        this.setSize(400, 200);
         this.setResizable(false);
         this.setModal(true);
         this.setLocationRelativeTo(null);
@@ -73,19 +73,21 @@ public class HabitCreation extends JDialog implements ActionListener {
 
         //Name label
         this.nameLabel.setForeground(Color.BLACK);
-        this.nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        this.nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.nameLabel.setFont(new Font("Verdana", Font.PLAIN, 10));
 
         //Name textField
         this.nameField.setMaximumSize(new Dimension(300,  70));
+        this.nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //Description label
         this.descriptionLabel.setForeground(Color.BLACK);
-        this.descriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        this.descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.descriptionLabel.setFont(new Font("Verdana", Font.PLAIN, 10));
 
         //Description textField
         this.descriptionField.setMaximumSize(new Dimension(300,  70));
+        this.descriptionField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //Buttons
 
