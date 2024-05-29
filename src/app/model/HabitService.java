@@ -47,6 +47,7 @@ public class HabitService {
             if (habit.getId() == habitToEdit.getId()) {
                 habitToEdit.setName(habitToEdit.getName());
                 habitToEdit.setDesc(habitToEdit.getDesc());
+                //habitToEdit.setDeletionDate(LocalDate.now());
                 break;
             }
         }

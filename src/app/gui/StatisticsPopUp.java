@@ -49,7 +49,10 @@ public class StatisticsPopUp extends JDialog implements ActionListener {
         //HabitStatsCard
         for(Habit habit: this.hs.getAllHabitsFromDB()) {
             HabitStatsCard statsCard = new HabitStatsCard(habit);
-            this.body.add(statsCard.innerPanel);
+
+            if(!habit.getCreationDate().equals(habit.getDeletionDate())) {
+                this.body.add(statsCard.innerPanel);
+            }
         }
         getContentPane().add(scrollPane);
 

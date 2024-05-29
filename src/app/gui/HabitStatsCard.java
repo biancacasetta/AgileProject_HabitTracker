@@ -98,12 +98,14 @@ public class HabitStatsCard {
     public int getCompletionPercentage() {
         long totalDays = 0;
         if(habit.getDeletionDate() != null) {
-            totalDays = ChronoUnit.DAYS.between(habit.getCreationDate(), habit.getDeletionDate());
+            totalDays = ChronoUnit.DAYS.between(habit.getCreationDate(), habit.getDeletionDate().plusDays(1));
         } else {
             totalDays = ChronoUnit.DAYS.between(habit.getCreationDate(), LocalDate.now().plusDays(1));
         }
 
         int completedDays = this.habitRecordDAO.getCompletionQuantity(this.habit);
+
+
 
         return completedDays * 100 / (int)totalDays;
     }

@@ -86,7 +86,7 @@ public class DeletionPopUp extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == deleteButton) {
             //Delete habit from the DB
-            habitService.updateHabitInDB(this.habit);
+            habitService.deleteHabitFromDB(this.habit.getId());
             System.out.println("Habit removed from DB");
             dashboard.updateHabitList(dashboard.getCurrentDate());
             deleted = true;

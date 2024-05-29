@@ -181,7 +181,7 @@ public class HabitDAO implements DAO<Habit> {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            String sql = "UPDATE activeHabits SET name=?, `desc`=?, creationDate=?, deletionDate=? WHERE id=?";
+            String sql = "UPDATE activeHabits SET name=?, desc=?, creationDate=?, deletionDate=? WHERE id=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, habit.getName());
