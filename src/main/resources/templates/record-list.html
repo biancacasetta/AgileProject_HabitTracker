@@ -76,11 +76,13 @@
                     <thead class="thead-dark">
                     <tr>
                         <th>Habit Name</th>
+                        <th>Habit Description</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="record : ${records}">
                         <td th:text="${record.habit.name}"></td>
+                        <td th:text="${record.habit.description}"></td>
                     </tr>
                     </tbody>
                 </table>
